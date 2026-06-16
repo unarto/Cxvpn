@@ -70,12 +70,6 @@ jobs:
           cp -r libs/* app/src/main/jniLibs/
         fi
 
-    - name: Tambal Referensi Kode Kotlin yang Hilang
-      run: |
-        [ -f app/src/main/java/com/v2ray/ang/ui/HotshareActivity.kt ] && sed -i 's/PREF_HTTP_PORT/"pref_http_port"/g' app/src/main/java/com/v2ray/ang/ui/HotshareActivity.kt
-        [ -f app/src/main/java/com/v2ray/ang/util/Utils.kt ] && sed -i 's/BuildConfig.FLAVOR/""/g' app/src/main/java/com/v2ray/ang/util/Utils.kt
-        [ -f app/src/main/java/com/v2ray/ang/util/Utils.kt ] && sed -i 's/FLAVOR/""/g' app/src/main/java/com/v2ray/ang/util/Utils.kt
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
