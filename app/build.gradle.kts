@@ -40,16 +40,22 @@ android {
 
     signingConfigs {
         create("debugConfig") {
-            storeFile = file("${rootDir}/debug.keystore")
-            storePassword = "android"
-            keyAlias = "androiddebugkey"
-            keyPassword = "android"
+            val keystoreFile = file("${rootDir}/debug.keystore")
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
         }
     }
 
     buildTypes {
         debug {
-            signingConfig = signingConfigs.getByName("debugConfig")
+            // Hanya aktifkan jika file keystore ditemukan
+            if (file("${rootDir}/debug.keystore").exists()) {
+                signingConfig = signingConfigs.getByName("debugConfig")
+            }
         }
         release {
             isMinifyEnabled = false
@@ -62,6 +68,7 @@ android {
 
     sourceSets {
         getByName("main") {
+            // Memastikan jniLibs mengambil dari folder app/libs jika ada
             jniLibs.srcDirs("libs")
         }
     }
@@ -88,7 +95,6 @@ android {
             useLegacyPackaging = true
         }
     }
-
 }
 
 dependencies {
