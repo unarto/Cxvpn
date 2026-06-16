@@ -17,10 +17,15 @@ jobs:
         submodules: 'recursive'
         fetch-depth: '0'
 
-    - name: Buat debug.keystore di Server
+    - name: Cek atau Buat debug.keystore
       run: |
-        keytool -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 365
-        mv debug.keystore ${{ github.workspace }}/debug.keystore
+        KEYSTORE_PATH="${{ github.workspace }}/debug.keystore"
+        if [ -f "$KEYSTORE_PATH" ]; then
+          echo "debug.keystore terdeteksi, menggunakan file yang ada."
+        else
+          echo "debug.keystore tidak ditemukan, membuat baru..."
+          keytool -genkeypair -alias androiddebugkey -keypass android -keystore "$KEYSTORE_PATH" -storepass android -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 365
+        fi
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3.2.0
