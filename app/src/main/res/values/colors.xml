@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- KUNCI AKSEN (Biru Terang) -->
+    <color name="colorPing">#2196F3</color> 
+    <color name="colorPingRed">#F44336</color> 
+    <color name="colorConfigType">#2196F3</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="color_fab_active">#1E88E5</color>
+    <color name="color_fab_inactive">#BDBDBD</color>
+    <color name="divider_color_light">#E0E0E0</color>
+    <color name="colorIndicator">@color/md_theme_primary</color>
+
+    <!-- Primary colors -->
+    <color name="md_theme_primary">#2196F3</color>
+    <color name="md_theme_onPrimary">#FFFFFF</color>
+    <color name="md_theme_primaryContainer">#BBDEFB</color>
+    <color name="md_theme_onPrimaryContainer">#0D47A1</color>
+
+    <!-- Secondary colors -->
+    <color name="md_theme_secondary">#03A9F4</color>
+    <color name="md_theme_onSecondary">#FFFFFF</color>
+    <color name="md_theme_secondaryContainer">#B3E5FC</color>
+    <color name="md_theme_onSecondaryContainer">#01579B</color>
+
+    <!-- Background & Surface -->
+    <color name="md_theme_background">#F5F5F5</color> 
+    <color name="md_theme_onBackground">#1C1B1F</color>
+
+    <color name="md_theme_surface">#FFFFFF</color>
+    <color name="md_theme_onSurface">#1C1B1F</color>
+    <color name="md_theme_surfaceVariant">#E0E0E0</color>
+    <color name="md_theme_onSurfaceVariant">#49454F</color>
+    
+    <!-- Outline & Inverse -->
+    <color name="md_theme_outline">#9E9E9E</color>
+    <color name="md_theme_outlineVariant">#BDBDBD</color>
+    <color name="md_theme_inverseSurface">#303030</color>
+    <color name="md_theme_inverseOnSurface">#F5F5F5</color>
+
+    <!-- Other colors -->
+    <color name="md_theme_inversePrimary">#90CAF9</color>
+    <color name="md_theme_shadow">#000000</color>
+    <color name="md_theme_surfaceTint">#2196F3</color>
+    <color name="md_theme_scrim">#000000</color>
+    
+    <color name="md_theme_error">#B3261E</color>
+    <color name="md_theme_errorContainer">#F9DEDC</color>
+    <color name="md_theme_onError">#FFFFFF</color>
+    <color name="md_theme_onErrorContainer">#410E0B</color>
+</resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_dashboard"
+        android:icon="@drawable/ic_dashboard_24"
+        android:title="Dashboard" />
+    <item
+        android:id="@+id/nav_proxies"
+        android:icon="@drawable/ic_proxies_24"
+        android:title="Proxies" />
+    <item
+        android:id="@+id/nav_profiles"
+        android:icon="@drawable/ic_folder_24"
+        android:title="Profiles" />
+    <item
+        android:id="@+id/nav_tools"
+        android:icon="@drawable/ic_settings_24dp"
+        android:title="Tools" />
+</menu>
