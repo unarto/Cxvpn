@@ -17,6 +17,11 @@ jobs:
         submodules: 'recursive'
         fetch-depth: '0'
 
+    - name: Buat debug.keystore di Server
+      run: |
+        keytool -genkeypair -alias androiddebugkey -keypass android -keystore debug.keystore -storepass android -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 365
+        mv debug.keystore ${{ github.workspace }}/debug.keystore
+
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3.2.0
       with:
@@ -43,21 +48,12 @@ jobs:
         LOCAL_LDFLAGS := -Wl,--build-id=none -Wl,--hash-style=gnu
         include $(BUILD_SHARED_LIBRARY)
         EOF
-        if [ -d "hev-socks5-tunnel" ]; then
-          cp -r hev-socks5-tunnel/* jni/hev-socks5-tunnel/
-        fi
-        $NDK_HOME/ndk-build \
-            NDK_PROJECT_PATH=. \
-            APP_BUILD_SCRIPT=jni/Android.mk \
-            "APP_ABI=armeabi-v7a arm64-v8a" \
-            APP_PLATFORM=android-24 \
-            NDK_LIBS_OUT=libs \
-            NDK_OUT=obj
+        if [ -d "hev-socks5-tunnel" ]; then cp -r hev-socks5-tunnel/* jni/hev-socks5-tunnel/; fi
+        $NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=jni/Android.mk "APP_ABI=armeabi-v7a arm64-v8a" APP_PLATFORM=android-24 NDK_LIBS_OUT=libs NDK_OUT=obj
 
-    - name: Download libv2ray AAR & Buat Custom Routing Assets
+    - name: Download AAR & Assets
       run: |
-        mkdir -p app/libs
-        mkdir -p app/src/main/assets
+        mkdir -p app/libs app/src/main/assets
         wget -q "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -O app/libs/libv2ray.aar || true
         wget -q "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -O app/src/main/assets/geoip.dat || true
         wget -q "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -O app/src/main/assets/geosite.dat || true
@@ -66,9 +62,7 @@ jobs:
     - name: Pindahkan Hasil Kompilasi Libs ke Modul App
       run: |
         mkdir -p app/src/main/jniLibs
-        if [ -d "libs" ]; then
-          cp -r libs/* app/src/main/jniLibs/
-        fi
+        if [ -d "libs" ]; then cp -r libs/* app/src/main/jniLibs/; fi
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
