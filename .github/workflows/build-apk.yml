@@ -1,0 +1,95 @@
+name: Build APK Mandiri
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: 'recursive'
+        fetch-depth: '0'
+
+    - name: Cek atau Buat debug.keystore
+      run: |
+        KEYSTORE_PATH="${{ github.workspace }}/debug.keystore"
+        if [ -f "$KEYSTORE_PATH" ]; then
+          echo "debug.keystore terdeteksi, menggunakan file yang ada."
+        else
+          echo "debug.keystore tidak ditemukan, membuat baru..."
+          keytool -genkeypair -alias androiddebugkey -keypass android -keystore "$KEYSTORE_PATH" -storepass android -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 365
+        fi
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3.2.0
+      with:
+        log-accepted-android-sdk-licenses: false
+        cmdline-tools-version: '13114758'
+        packages: 'platforms;android-36.1 build-tools;36.1.0 platform-tools'
+
+    - name: Install NDK & Suntik Konfigurasi Gradle
+      run: |
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.2.13676358"
+        echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
+        sed -i '10i\        \n    ndkVersion = "28.2.13676358"' "${{ github.workspace }}/app/build.gradle.kts"
+        sed -i '/android {/a \    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
+
+    - name: Buat Skrip dan Kompilasi libhevtun
+      run: |
+        mkdir -p jni/hev-socks5-tunnel
+        cat << 'EOF' > jni/Android.mk
+        LOCAL_PATH := $(call my-dir)
+        include $(CLEAR_VARS)
+        LOCAL_MODULE := hev-socks5-tunnel
+        LOCAL_SRC_FILES := $(wildcard hev-socks5-tunnel/src/**/*.c) $(wildcard hev-socks5-tunnel/src/*.c)
+        LOCAL_CFLAGS := -O3 -DPKGNAME=com/example/chatoex/service
+        LOCAL_LDFLAGS := -Wl,--build-id=none -Wl,--hash-style=gnu
+        include $(BUILD_SHARED_LIBRARY)
+        EOF
+        if [ -d "hev-socks5-tunnel" ]; then cp -r hev-socks5-tunnel/* jni/hev-socks5-tunnel/; fi
+        $NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=jni/Android.mk "APP_ABI=armeabi-v7a arm64-v8a" APP_PLATFORM=android-24 NDK_LIBS_OUT=libs NDK_OUT=obj
+
+    - name: Download AAR & Assets
+      run: |
+        mkdir -p app/libs app/src/main/assets
+        wget -q "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -O app/libs/libv2ray.aar || true
+        wget -q "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -O app/src/main/assets/geoip.dat || true
+        wget -q "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -O app/src/main/assets/geosite.dat || true
+        echo '{"routing":{"domainStrategy":"IPIfNonMatch","rules":[{"type":"field","outboundTag":"block","domain":["geosite:category-ads-all"]},{"type":"field","outboundTag":"direct","domain":["geosite:google","domain:id","domain:go.id"],"ip":["geoip:private","geoip:id"]},{"type":"field","outboundTag":"proxy","network":"tcp,udp"}]}}' > app/src/main/assets/custom_routing.json
+
+    - name: Pindahkan Hasil Kompilasi Libs ke Modul App
+      run: |
+        mkdir -p app/src/main/jniLibs
+        if [ -d "libs" ]; then cp -r libs/* app/src/main/jniLibs/; fi
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Build APK Split via Gradle
+      run: ./gradlew assembleDebug
+
+    - name: Upload Semua Hasil Split APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: cemplung-vpn-split-apks
+        path: app/build/outputs/apk/debug/**/*.apk
+    # --- STEP UPLOAD DIPISAH BERDASARKAN ARSITEKTUR ---
+    
+    - name: Upload Artifact ARM64 (v8a)
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug-arm64-v8a
+        path: app/build/outputs/apk/debug/*arm64*.apk
+
+    - name: Upload Artifact ARMV7A (v7a)
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-debug-armeabi-v7a
+        path: app/build/outputs/apk/debug/*v7a*.apk
