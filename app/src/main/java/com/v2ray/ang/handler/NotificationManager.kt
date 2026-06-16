@@ -41,7 +41,6 @@ object NotificationManager {
      * @param currentConfig The current profile configuration.
      */
     fun startSpeedNotification(currentConfig: ProfileItem?) {
-        if (MmkvManager.decodeSettingsBool(AppConfig.PREF_SPEED_ENABLED) != true) return
         if (speedNotificationJob != null || V2RayServiceManager.isRunning() == false) return
 
         lastQueryTime = System.currentTimeMillis()
@@ -52,7 +51,27 @@ object NotificationManager {
         speedNotificationJob = CoroutineScope(Dispatchers.IO).launch {
             var totalTx = 0L
             var totalRx = 0L
+            var todayTx = 0L
+            var todayRx = 0L
+            var lastDateStr = ""
             while (isActive) {
+                val formatter = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+                val currentDateStr = formatter.format(java.util.Date())
+                if (currentDateStr != lastDateStr) {
+                    val savedDate = MmkvManager.decodeSettingsString("Traffic_Date", "")
+                    if (currentDateStr == savedDate) {
+                        todayTx = MmkvManager.decodeSettingsLong("Traffic_Tx", 0L)
+                        todayRx = MmkvManager.decodeSettingsLong("Traffic_Rx", 0L)
+                    } else {
+                        todayTx = 0L
+                        todayRx = 0L
+                        MmkvManager.encodeSettings("Traffic_Date", currentDateStr)
+                        MmkvManager.encodeSettings("Traffic_Tx", 0L)
+                        MmkvManager.encodeSettings("Traffic_Rx", 0L)
+                    }
+                    lastDateStr = currentDateStr
+                }
+
                 val queryTime = System.currentTimeMillis()
                 val sinceLastQueryInSeconds = (queryTime - lastQueryTime) / 1000.0
                 var proxyTotal = 0L
@@ -73,8 +92,19 @@ object NotificationManager {
                 val directDownlink = V2RayServiceManager.queryStats(AppConfig.TAG_DIRECT, AppConfig.DOWNLINK)
                 val zeroSpeed = proxyTotal == 0L && directUplink == 0L && directDownlink == 0L
                 
-                totalTx += currentProxyTx + directUplink
-                totalRx += currentProxyRx + directDownlink
+                val currentTx = currentProxyTx + directUplink
+                val currentRx = currentProxyRx + directDownlink
+
+                totalTx += currentTx
+                totalRx += currentRx
+                
+                todayTx += currentTx
+                todayRx += currentRx
+                
+                if (currentTx > 0 || currentRx > 0) {
+                    MmkvManager.encodeSettings("Traffic_Tx", todayTx)
+                    MmkvManager.encodeSettings("Traffic_Rx", todayRx)
+                }
 
                 try {
                     val service = getService()
@@ -82,12 +112,15 @@ object NotificationManager {
                         val intent = Intent(AppConfig.BROADCAST_ACTION_ACTIVITY)
                         intent.setPackage(AppConfig.ANG_PACKAGE)
                         intent.putExtra("key", AppConfig.MSG_STATE_TRAFFIC_UPDATE)
-                        val totalTxSpeed = ((currentProxyTx + directUplink) / sinceLastQueryInSeconds).toLong()
-                        val totalRxSpeed = ((currentProxyRx + directDownlink) / sinceLastQueryInSeconds).toLong()
+                        val totalTxSpeed = (currentTx / sinceLastQueryInSeconds).toLong()
+                        val totalRxSpeed = (currentRx / sinceLastQueryInSeconds).toLong()
                         intent.putExtra("tx_speed", totalTxSpeed)
                         intent.putExtra("rx_speed", totalRxSpeed)
-                        intent.putExtra("total_tx", totalTx)
-                        intent.putExtra("total_rx", totalRx)
+                        intent.putExtra("total_tx", todayTx)
+                        intent.putExtra("total_rx", todayRx)
+                        val memInfo = android.os.Debug.MemoryInfo()
+                        android.os.Debug.getMemoryInfo(memInfo)
+                        intent.putExtra("app_memory", memInfo.totalPss / 1024L)
                         service.sendBroadcast(intent)
                     }
                 } catch (e: Exception) {
@@ -102,7 +135,9 @@ object NotificationManager {
                         text, AppConfig.TAG_DIRECT, directUplink / sinceLastQueryInSeconds,
                         directDownlink / sinceLastQueryInSeconds
                     )
-                    updateNotification(text.toString(), proxyTotal, directDownlink + directUplink)
+                    if (MmkvManager.decodeSettingsBool(AppConfig.PREF_SPEED_ENABLED) == true) {
+                        updateNotification(text.toString(), proxyTotal, directDownlink + directUplink)
+                    }
                 }
                 lastZeroSpeed = zeroSpeed
                 lastQueryTime = queryTime

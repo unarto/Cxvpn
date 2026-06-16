@@ -1,5 +1,6 @@
 package com.v2ray.ang.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.preference.CheckBoxPreference
@@ -9,6 +10,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequest
 import androidx.work.multiprocess.RemoteWorkManager
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.v2ray.ang.AngApplication
 import com.v2ray.ang.AppConfig
 import com.v2ray.ang.AppConfig.VPN
@@ -24,6 +26,43 @@ class SettingsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentViewWithToolbar(R.layout.activity_settings, showHomeAsUp = true, title = getString(R.string.title_settings))
+
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.selectedItemId = R.id.nav_tools
+        bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_dashboard -> {
+                    val targetIntent = Intent(this, MainActivity::class.java)
+                    targetIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    targetIntent.putExtra("NAV_GO_TO", "dashboard")
+                    startActivity(targetIntent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_proxies -> {
+                    val targetIntent = Intent(this, MainActivity::class.java)
+                    targetIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    targetIntent.putExtra("NAV_GO_TO", "proxies")
+                    startActivity(targetIntent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_profiles -> {
+                    val targetIntent = Intent(this, SubSettingActivity::class.java)
+                    targetIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    startActivity(targetIntent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_tools -> {
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     class SettingsFragment : PreferenceFragmentCompat() {

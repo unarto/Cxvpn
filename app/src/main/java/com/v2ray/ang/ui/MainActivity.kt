@@ -94,10 +94,12 @@ class MainActivity : HelperBaseActivity() {
                 }
                 R.id.nav_profiles -> {
                     startActivity(Intent(this, SubSettingActivity::class.java))
+                    overridePendingTransition(0, 0)
                     false
                 }
                 R.id.nav_tools -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
+                    overridePendingTransition(0, 0)
                     false
                 }
                 else -> false
@@ -152,18 +154,19 @@ class MainActivity : HelperBaseActivity() {
             applyRunningState(false, isRunning)
         }
         mainViewModel.updateTrafficAction.observe(this) { traffic ->
-            binding.tvNetworkSpeed.text = "Network speed\n↑ ${traffic.txSpeed.toSpeedString()}   ↓ ${traffic.rxSpeed.toSpeedString()}"
-            binding.tvTrafficUsage.text = "Traffic usage\n↑ ${traffic.totalTx.toTrafficString()}\n↓ ${traffic.totalRx.toTrafficString()}"
+            binding.tvNetworkSpeed.text = "↑ ${traffic.txSpeed.toSpeedString()}   ↓ ${traffic.rxSpeed.toSpeedString()}"
+            binding.tvTrafficUsage.text = "↑ ${traffic.totalTx.toTrafficString()}\n↓ ${traffic.totalRx.toTrafficString()}"
+            binding.tvMemoryInfo.text = "${traffic.appMemory} MB"
             
-            val runtime = Runtime.getRuntime()
-            val usedMemInMB = (runtime.totalMemory() - runtime.freeMemory()) / 1048576L
-            val maxHeapSizeInMB = runtime.maxMemory() / 1048576L
-            binding.tvMemoryInfo.text = "Memory info\n${usedMemInMB} MB / ${maxHeapSizeInMB} MB"
-            
-            val networkIp = getIpAddress("net")
-            binding.tvNetworkIp.text = "Network\n" + (if(networkIp.isNotEmpty()) networkIp else "-")
+            val isRunning = mainViewModel.isRunning.value == true
+            val networkIp = if (isRunning) {
+                com.v2ray.ang.handler.MmkvManager.decodeServerConfig(com.v2ray.ang.handler.MmkvManager.getSelectServer() ?: "")?.server ?: getIpAddress("net")
+            } else {
+                getIpAddress("net")
+            }
+            binding.tvNetworkIp.text = if (networkIp.isNotEmpty()) networkIp else "-"
             val tunIp = getIpAddress("tun")
-            binding.tvIntranetIp.text = "Intranet IP\n" + (if(tunIp.isNotEmpty()) tunIp else "-")
+            binding.tvIntranetIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
         }
         mainViewModel.startListenBroadcast()
         mainViewModel.initAssets(assets)
@@ -256,10 +259,60 @@ class MainActivity : HelperBaseActivity() {
         }
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+    }
+
     override fun onResume() {
         super.onResume()
+        
+        val navGoTo = intent.getStringExtra("NAV_GO_TO")
+        if (navGoTo == "dashboard") {
+            binding.bottomNav.selectedItemId = R.id.nav_dashboard
+            binding.layoutDashboard.visibility = android.view.View.VISIBLE
+            binding.layoutProxies.visibility = android.view.View.GONE
+        } else if (navGoTo == "proxies") {
+            binding.bottomNav.selectedItemId = R.id.nav_proxies
+            binding.layoutDashboard.visibility = android.view.View.GONE
+            binding.layoutProxies.visibility = android.view.View.VISIBLE
+        } else {
+            if (binding.layoutDashboard.visibility == android.view.View.VISIBLE) {
+                binding.bottomNav.selectedItemId = R.id.nav_dashboard
+            } else if (binding.layoutProxies.visibility == android.view.View.VISIBLE) {
+                binding.bottomNav.selectedItemId = R.id.nav_proxies
+            }
+        }
+        
+        // Clear the intent extra so it doesn't trigger again on normal resume
+        intent.removeExtra("NAV_GO_TO")
+
+        val formatter = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault())
+        val currentDateStr = formatter.format(java.util.Date())
+        val savedDate = com.v2ray.ang.handler.MmkvManager.decodeSettingsString("Traffic_Date", "")
+        if (currentDateStr == savedDate) {
+            val todayTx = com.v2ray.ang.handler.MmkvManager.decodeSettingsLong("Traffic_Tx", 0L)
+            val todayRx = com.v2ray.ang.handler.MmkvManager.decodeSettingsLong("Traffic_Rx", 0L)
+            binding.tvTrafficUsage.text = "↑ ${com.v2ray.ang.extension.toTrafficString(todayTx)}\n↓ ${com.v2ray.ang.extension.toTrafficString(todayRx)}"
+        } else {
+            binding.tvTrafficUsage.text = "↑ 0 B\n↓ 0 B"
+        }
+
+        if (mainViewModel.isRunning.value != true) {
+            val memInfo = android.os.Debug.MemoryInfo()
+            android.os.Debug.getMemoryInfo(memInfo)
+            binding.tvMemoryInfo.text = "${memInfo.totalPss / 1024L} MB"
+            
+            val networkIp = getIpAddress("net")
+            binding.tvNetworkIp.text = if (networkIp.isNotEmpty()) networkIp else "-"
+            val tunIp = getIpAddress("tun")
+            binding.tvIntranetIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+        }
+
         val routingMode = com.v2ray.ang.handler.MmkvManager.decodeSettingsString(com.v2ray.ang.AppConfig.PREF_ROUTING_DOMAIN_STRATEGY) ?: "IPIfNonMatch"
-        binding.tvRoutingMode.text = "Routing mode\n$routingMode"
+        binding.tvRoutingMode.text = routingMode
+        
+        mainViewModel.reloadServerList()
     }
 
     override fun onPause() {

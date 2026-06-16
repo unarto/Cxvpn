@@ -12,23 +12,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="?attr/selectableItemBackground"
+        android:layout_margin="6dp"
+        android:background="@drawable/bg_proxy_unselected"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center"
         android:nextFocusRight="@+id/layout_share"
         android:orientation="horizontal"
-        android:paddingStart="@dimen/padding_spacing_dp4"
+        android:paddingStart="@dimen/padding_spacing_dp8"
         android:paddingTop="@dimen/padding_spacing_dp8"
-        android:paddingEnd="@dimen/padding_spacing_dp4"
+        android:paddingEnd="@dimen/padding_spacing_dp8"
         android:paddingBottom="@dimen/padding_spacing_dp8">
-
-        <LinearLayout
-            android:id="@+id/layout_indicator"
-            android:layout_width="@dimen/padding_spacing_dp4"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:orientation="vertical" />
 
         <LinearLayout
             android:layout_width="match_parent"

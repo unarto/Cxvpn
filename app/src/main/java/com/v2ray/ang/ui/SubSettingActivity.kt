@@ -55,6 +55,42 @@ class SubSettingActivity : BaseActivity() {
 
         mItemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
         mItemTouchHelper?.attachToRecyclerView(binding.recyclerView)
+        
+        binding.bottomNav.selectedItemId = R.id.nav_profiles
+        binding.bottomNav.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_dashboard -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    intent.putExtra("NAV_GO_TO", "dashboard")
+                    startActivity(intent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_proxies -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    intent.putExtra("NAV_GO_TO", "proxies")
+                    startActivity(intent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                R.id.nav_profiles -> {
+                    true
+                }
+                R.id.nav_tools -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    startActivity(intent)
+                    finish()
+                    overridePendingTransition(0, 0)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     override fun onResume() {

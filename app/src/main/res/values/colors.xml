@@ -17,6 +17,8 @@
     <color name="md_theme_onPrimaryContainer">#0D47A1</color>
 
     <!-- Secondary colors -->
+    <color name="dashboard_card_bg">#1903A9F4</color>
+    <color name="dashboard_card_text">#1C1B1F</color>
     <color name="md_theme_secondary">#03A9F4</color>
     <color name="md_theme_onSecondary">#FFFFFF</color>
     <color name="md_theme_secondaryContainer">#B3E5FC</color>

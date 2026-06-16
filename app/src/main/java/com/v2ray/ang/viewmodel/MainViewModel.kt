@@ -44,7 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isRunning by lazy { MutableLiveData<Boolean>() }
     val updateListAction by lazy { MutableLiveData<Int>() }
     val updateTestResultAction by lazy { MutableLiveData<String>() }
-    data class TrafficData(val txSpeed: Long, val rxSpeed: Long, val totalTx: Long, val totalRx: Long)
+    data class TrafficData(val txSpeed: Long, val rxSpeed: Long, val totalTx: Long, val totalRx: Long, val appMemory: Long)
     val updateTrafficAction by lazy { MutableLiveData<TrafficData>() }
     private val tcpingTestScope by lazy { CoroutineScope(Dispatchers.IO) }
 
@@ -480,7 +480,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     val rxSpeed = intent.getLongExtra("rx_speed", 0)
                     val totalTx = intent.getLongExtra("total_tx", 0)
                     val totalRx = intent.getLongExtra("total_rx", 0)
-                    updateTrafficAction.value = TrafficData(txSpeed, rxSpeed, totalTx, totalRx)
+                    val appMemory = intent.getLongExtra("app_memory", 0)
+                    updateTrafficAction.value = TrafficData(txSpeed, rxSpeed, totalTx, totalRx, appMemory)
                 }
             }
         }

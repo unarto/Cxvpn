@@ -69,9 +69,9 @@ class MainRecyclerAdapter(
 
             //layoutIndicator
             if (guid == MmkvManager.getSelectServer()) {
-                holder.itemMainBinding.layoutIndicator.setBackgroundResource(R.color.colorIndicator)
+                holder.itemMainBinding.infoContainer.setBackgroundResource(R.drawable.bg_proxy_selected)
             } else {
-                holder.itemMainBinding.layoutIndicator.setBackgroundResource(0)
+                holder.itemMainBinding.infoContainer.setBackgroundResource(R.drawable.bg_proxy_unselected)
             }
 
             //subscription remarks

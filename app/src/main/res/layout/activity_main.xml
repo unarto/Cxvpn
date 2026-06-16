@@ -35,7 +35,7 @@
                     android:id="@+id/layout_proxies"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="56dp">
+                    android:layout_marginBottom="72dp">
                     
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -106,7 +106,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom|end"
-                            android:layout_marginBottom="@dimen/view_height_dp36"
+                            android:layout_marginBottom="16dp"
                             android:clickable="true"
                             android:contentDescription="@string/tasker_start_service"
                             android:focusable="true"
@@ -122,7 +122,7 @@
                     android:id="@+id/layout_dashboard"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="56dp"
+                    android:layout_marginBottom="72dp"
                     android:visibility="gone">
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -135,16 +135,33 @@
                             android:layout_width="match_parent"
                             android:layout_height="120dp"
                             app:cardCornerRadius="16dp"
-                            app:cardBackgroundColor="#2D3035"
+                            app:cardBackgroundColor="@color/dashboard_card_bg"
+                            app:cardElevation="0dp"
                             android:layout_marginBottom="16dp">
-                            <TextView
-                                android:id="@+id/tv_network_speed"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Network speed: 0 B/s | 0 B/s"
-                                android:textColor="#FFF"
-                                android:layout_margin="16dp"
-                                android:textStyle="bold" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Network Speed"
+                                    android:textColor="@color/dashboard_card_text"
+                                    android:layout_marginBottom="8dp"
+                                    app:drawableStartCompat="@drawable/ic_stat_name"
+                                    android:drawablePadding="8dp"
+                                    app:drawableTint="@color/dashboard_card_text"
+                                    android:textStyle="bold" />
+                                <TextView
+                                    android:id="@+id/tv_network_speed"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="↑ 0 B/s   ↓ 0 B/s"
+                                    android:textColor="@color/dashboard_card_text"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+                            </LinearLayout>
                         </androidx.cardview.widget.CardView>
                         
                         <LinearLayout
@@ -163,53 +180,98 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
                                     app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="#2D3035"
+                                    app:cardBackgroundColor="@color/dashboard_card_bg"
+                                    app:cardElevation="0dp"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp"
                                     android:clickable="true"
                                     android:focusable="true">
-                                    <TextView
-                                        android:id="@+id/tv_routing_mode"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Routing mode\nGlobal"
-                                        android:textColor="#FFF"
-                                        android:layout_margin="16dp"
-                                        android:textStyle="bold" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Routing Mode"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:layout_marginBottom="8dp"
+                                            app:drawableStartCompat="@drawable/ic_stat_name"
+                                            android:drawablePadding="8dp"
+                                            app:drawableTint="@color/dashboard_card_text"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/tv_routing_mode"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Global"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="18sp"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
                                 </androidx.cardview.widget.CardView>
                                 
                                 <androidx.cardview.widget.CardView
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
                                     app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="#2D3035"
+                                    app:cardBackgroundColor="@color/dashboard_card_bg"
+                                    app:cardElevation="0dp"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp">
-                                    <TextView
-                                        android:id="@+id/tv_intranet_ip"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Intranet IP\n-"
-                                        android:textColor="#FFF"
-                                        android:layout_margin="16dp"
-                                        android:textStyle="bold" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Provider IP"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:layout_marginBottom="4dp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/tv_intranet_ip"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
                                 </androidx.cardview.widget.CardView>
                                 
                                 <androidx.cardview.widget.CardView
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
                                     app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="#2D3035"
+                                    app:cardBackgroundColor="@color/dashboard_card_bg"
+                                    app:cardElevation="0dp"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp">
-                                    <TextView
-                                        android:id="@+id/tv_memory_info"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Memory info"
-                                        android:textColor="#FFF"
-                                        android:layout_margin="16dp"
-                                        android:textStyle="bold" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Memory Info"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:layout_marginBottom="4dp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/tv_memory_info"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
                                 </androidx.cardview.widget.CardView>
                             </LinearLayout>
                             <!-- Right Column -->
@@ -220,36 +282,68 @@
                                 android:orientation="vertical">
                                 <androidx.cardview.widget.CardView
                                     android:layout_width="match_parent"
-                                    android:layout_height="80dp"
+                                    android:layout_height="160dp"
                                     app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="#2D3035"
+                                    app:cardBackgroundColor="@color/dashboard_card_bg"
+                                    app:cardElevation="0dp"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginBottom="16dp">
-                                    <TextView
-                                        android:id="@+id/tv_network_ip"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Network\n-"
-                                        android:textColor="#FFF"
-                                        android:layout_margin="16dp"
-                                        android:textStyle="bold" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Traffic Usage"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:layout_marginBottom="8dp"
+                                            app:drawableStartCompat="@drawable/ic_stat_name"
+                                            android:drawablePadding="8dp"
+                                            app:drawableTint="@color/dashboard_card_text"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/tv_traffic_usage"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="↑ 0 B\n↓ 0 B"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="16sp"
+                                            android:gravity="center"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
                                 </androidx.cardview.widget.CardView>
                                 
                                 <androidx.cardview.widget.CardView
                                     android:layout_width="match_parent"
-                                    android:layout_height="180dp"
+                                    android:layout_height="80dp"
                                     app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="#2D3035"
+                                    app:cardBackgroundColor="@color/dashboard_card_bg"
+                                    app:cardElevation="0dp"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginBottom="16dp">
-                                    <TextView
-                                        android:id="@+id/tv_traffic_usage"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="Traffic usage\n0 B\n0 B"
-                                        android:textColor="#FFF"
-                                        android:layout_margin="16dp"
-                                        android:textStyle="bold" />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Network IP"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:layout_marginBottom="4dp"
+                                            android:textStyle="bold" />
+                                        <TextView
+                                            android:id="@+id/tv_network_ip"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="-"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+                                    </LinearLayout>
                                 </androidx.cardview.widget.CardView>
                             </LinearLayout>
                         </LinearLayout>
@@ -259,8 +353,9 @@
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottom_nav"
                     android:layout_width="match_parent"
-                    android:layout_height="56dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    app:labelVisibilityMode="labeled"
                     app:menu="@menu/bottom_nav_menu" />
                 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
