@@ -17,12 +17,14 @@ jobs:
         submodules: 'recursive'
         fetch-depth: '0'
 
-    - name: Tambal Warna Material Design yang Hilang
+    - name: Tambal Semua Resource yang Kurang
       run: |
-        # Membuat atau menimpa file colors.xml agar warna M3 tersedia
+        # Buat folder jika belum ada
         mkdir -p app/src/main/res/values
+        mkdir -p app/src/main/res/drawable
+
+        # Tambal Warna Material Design
         cat << 'EOF' > app/src/main/res/values/colors_m3.xml
-        <?xml version="1.0" encoding="utf-8"?>
         <resources>
             <color name="md_theme_tertiary">#7D5260</color>
             <color name="md_theme_onTertiary">#FFFFFF</color>
@@ -30,6 +32,18 @@ jobs:
             <color name="md_theme_onTertiaryContainer">#31111D</color>
         </resources>
         EOF
+
+        # Tambal Style Overlay agar layout tidak error
+        cat << 'EOF' > app/src/main/res/values/styles_dummy.xml
+        <resources>
+            <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+            <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+        </resources>
+        EOF
+
+        # Tambal Ikon Drawable Dummy agar activity_hotshare.xml bisa jalan
+        echo '<?xml version="1.0" encoding="utf-8"?><vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24"><path android:fillColor="#000000" android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2z"/></vector>' > app/src/main/res/drawable/ic_circle_solid.xml
+        echo '<?xml version="1.0" encoding="utf-8"?><vector xmlns:android="http://schemas.android.com/apk/res/android" android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24"><path android:fillColor="#000000" android:pathData="M12,2c-5.5,0 -10,4.5 -10,10s4.5,10 10,10 10,-4.5 10,-10 -4.5,-10 -10,-10zM12,17c-0.55,0 -1,-0.45 -1,-1v-4c0,-0.55 0.45,-1 1,-1s1,0.45 1,1v4c0,0.55 -0.45,1 -1,1zM12,9c-0.55,0 -1,-0.45 -1,-1s0.45,-1 1,-1 1,0.45 1,1 -0.45,1 -1,1z"/></vector>' > app/src/main/res/drawable/ic_info_24dp.xml
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3.2.0
@@ -42,7 +56,6 @@ jobs:
       run: |
         echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
-        # Menggunakan jalur absolut yang pasti ditemukan
         sed -i '10i\        \n    ndkVersion = "28.2.13676358"' "${{ github.workspace }}/app/build.gradle.kts"
         sed -i '/android {/a \    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
 
@@ -73,7 +86,6 @@ jobs:
       run: |
         mkdir -p app/libs
         mkdir -p app/src/main/assets
-        # Menambahkan || true agar proses tidak mati meski download gagal sesaat
         wget -q "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -O app/libs/libv2ray.aar || true
         wget -q "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -O app/src/main/assets/geoip.dat || true
         wget -q "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -O app/src/main/assets/geosite.dat || true
