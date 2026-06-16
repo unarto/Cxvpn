@@ -17,6 +17,20 @@ jobs:
         submodules: 'recursive'
         fetch-depth: '0'
 
+    - name: Tambal Warna Material Design yang Hilang
+      run: |
+        # Membuat atau menimpa file colors.xml agar warna M3 tersedia
+        mkdir -p app/src/main/res/values
+        cat << 'EOF' > app/src/main/res/values/colors_m3.xml
+        <?xml version="1.0" encoding="utf-8"?>
+        <resources>
+            <color name="md_theme_tertiary">#7D5260</color>
+            <color name="md_theme_onTertiary">#FFFFFF</color>
+            <color name="md_theme_tertiaryContainer">#FFD8E4</color>
+            <color name="md_theme_onTertiaryContainer">#31111D</color>
+        </resources>
+        EOF
+
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3.2.0
       with:
