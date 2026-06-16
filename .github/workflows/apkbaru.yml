@@ -44,8 +44,7 @@ jobs:
 
     - name: Buat Skrip dan Kompilasi libhevtun
       run: |
-        # 1. Tulis ulang skrip compile-hevtun.sh secara otomatis (on-the-fly)
-        # PKGNAME disesuaikan dengan nama package barumu (com.example.chatoex)
+        # 1. Tulis ulang skrip compile-hevtun.sh dengan metode salin langsung (bukan symlink)
         cat << 'EOF' > compile-hevtun.sh
         #!/bin/bash
         set -o errexit
@@ -56,10 +55,20 @@ jobs:
         clear_tmp () { rm -rf $TMPDIR; }
         trap 'echo -e "Aborted, error $? in command: $BASH_COMMAND"; trap ERR; clear_tmp; exit 1' ERR INT
 
+        # Deteksi apakah folder submodule ada isinya atau tidak
+        if [ ! -d "$__dir/hev-socks5-tunnel" ] || [ -z "$(ls -A "$__dir/hev-socks5-tunnel" 2>/dev/null)" ]; then
+          echo "ERROR: Folder hev-socks5-tunnel kosong atau tidak ditemukan!"
+          echo "Pastikan submodule git sudah ter-checkout dengan benar."
+          exit 1
+        fi
+
         mkdir -p "$TMPDIR/jni"
         pushd "$TMPDIR"
+        
         echo 'include $(call all-subdir-makefiles)' > jni/Android.mk
-        ln -s "$__dir/hev-socks5-tunnel" jni/hev-socks5-tunnel
+        
+        # GANTI JALUR: Salin total folder aslinya ke direktori jni agar terbaca penuh oleh NDK
+        cp -r "$__dir/hev-socks5-tunnel" jni/hev-socks5-tunnel
 
         $NDK_HOME/ndk-build \
             NDK_PROJECT_PATH=. \
@@ -77,24 +86,23 @@ jobs:
         rm -rf $TMPDIR
         EOF
         
-        # 2. Berikan izin eksekusi dan jalankan kompilasi native C nya
+        # 2. Eksekusi skrip kompilasi
         chmod +x compile-hevtun.sh
         ./compile-hevtun.sh
 
     - name: Download libv2ray AAR & Buat Custom Routing Assets
       run: |
-        # Buat folder penampung jika belum ada
         mkdir -p app/libs
         mkdir -p app/src/main/assets
         
-        # 1. Download Core AAR kustom milikmu
+        # Download Core AAR kustom
         curl -L "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -o app/libs/libv2ray.aar
         
-        # 2. Download Data Geografis Routing (GeoIP & Geosite) resmi terbaru
+        # Download Data Geografis Routing
         curl -L "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -o app/src/main/assets/geoip.dat
         curl -L "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -o app/src/main/assets/geosite.dat
 
-        # 3. Otomatis buat file JSON Custom Routing bawaan di dalam Assets
+        # Buat file JSON Custom Routing bawaan
         cat << 'EOF' > app/src/main/assets/custom_routing.json
         {
           "routing": {
@@ -135,7 +143,6 @@ jobs:
 
     - name: Pindahkan Hasil Kompilasi Libs ke Modul App
       run: |
-        # Menyalin file .so dari libhevtun ke folder jniLibs utama aplikasi
         mkdir -p app/src/main/jniLibs
         if [ -d "libs" ]; then
           cp -r libs/* app/src/main/jniLibs/
