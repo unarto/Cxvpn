@@ -2,10 +2,6 @@ name: Build APK Mandiri
 
 on:
   workflow_dispatch:
-    inputs:
-      release_tag:
-        required: false
-        type: string
   push:
     branches:
       - master
@@ -30,45 +26,31 @@ jobs:
 
     - name: Install NDK & Suntik Konfigurasi Gradle
       run: |
-        # 1. Install NDK versi yang dibutuhkan
-        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
-          --channel=0 \
-          --install "ndk;28.2.13676358"
+        # 1. Install NDK
+        echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
         
-        # 2. Suntik NDK Version ke build.gradle.kts
-        sed -i '10i\        \n    ndkVersion = "28.2.13676358"' ${{ github.workspace }}/app/build.gradle.kts
+        # 2. Suntik NDK ke app/build.gradle.kts (tanpa path V2rayNG)
+        sed -i '10i\        \n    ndkVersion = "28.2.13676358"' app/build.gradle.kts
         
-        # 3. Otomatis Suntik Aturan Pisah APK (Arm64 & Armv7a)
-        sed -i '/android {/a \    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' ${{ github.workspace }}/app/build.gradle.kts
+        # 3. Suntik Aturan Split APK
+        sed -i '/android {/a \    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' app/build.gradle.kts
 
     - name: Buat Skrip dan Kompilasi libhevtun
       run: |
-        # Buat folder kerja JNI yang bersih di root
         mkdir -p jni/hev-socks5-tunnel
-        
-        # 1. Tulis ulang file induk Android.mk secara manual agar NDK tidak tersesat
         cat << 'EOF' > jni/Android.mk
         LOCAL_PATH := $(call my-dir)
         include $(CLEAR_VARS)
-
         LOCAL_MODULE := hevtun
-        
-        # Mengambil seluruh source code C dari folder submodule secara rekursif
         LOCAL_SRC_FILES := $(wildcard hev-socks5-tunnel/src/**/*.c) $(wildcard hev-socks5-tunnel/src/*.c)
-        
         LOCAL_CFLAGS := -O3 -DPKGNAME=com/example/chatoex/service
         LOCAL_LDFLAGS := -Wl,--build-id=none -Wl,--hash-style=gnu
-        
         include $(BUILD_SHARED_LIBRARY)
         EOF
-
-        # 2. Salin isi file C asli ke folder tujuan (jika submodulnya ada)
         if [ -d "hev-socks5-tunnel" ]; then
           cp -r hev-socks5-tunnel/* jni/hev-socks5-tunnel/
         fi
-
-        # 3. Jalankan perintah ndk-build mandiri dengan target direktori lokal
         $NDK_HOME/ndk-build \
             NDK_PROJECT_PATH=. \
             APP_BUILD_SCRIPT=jni/Android.mk \
@@ -81,52 +63,10 @@ jobs:
       run: |
         mkdir -p app/libs
         mkdir -p app/src/main/assets
-        
-        # Download Core AAR kustom milikmu
-        curl -L "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -o app/libs/libv2ray.aar
-        
-        # Download Data Geografis Routing
-        curl -L "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -o app/src/main/assets/geoip.dat
-        curl -L "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -o app/src/main/assets/geosite.dat
-
-        # Buat file JSON Custom Routing bawaan
-        cat << 'EOF' > app/src/main/assets/custom_routing.json
-        {
-          "routing": {
-            "domainStrategy": "IPIfNonMatch",
-            "rules": [
-              {
-                "type": "field",
-                "outboundTag": "block",
-                "domain": [
-                  "geosite:category-ads-all"
-                ],
-                "description": "Otomatis blokir semua iklan pakai geosite"
-              },
-              {
-                "type": "field",
-                "outboundTag": "direct",
-                "domain": [
-                  "geosite:google",
-                  "domain:id",
-                  "domain:go.id"
-                ],
-                "ip": [
-                  "geoip:private",
-                  "geoip:id"
-                ],
-                "description": "Koneksi lokal Indonesia & e-banking langsung tanpa VPN"
-              },
-              {
-                "type": "field",
-                "outboundTag": "proxy",
-                "network": "tcp,udp",
-                "description": "Sisa traffic lainnya masuk ke server VPN"
-              }
-            ]
-          }
-        }
-        EOF
+        curl -Lsf "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -o app/libs/libv2ray.aar
+        curl -Lsf "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -o app/src/main/assets/geoip.dat
+        curl -Lsf "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -o app/src/main/assets/geosite.dat
+        echo '{"routing":{"domainStrategy":"IPIfNonMatch","rules":[{"type":"field","outboundTag":"block","domain":["geosite:category-ads-all"]},{"type":"field","outboundTag":"direct","domain":["geosite:google","domain:id","domain:go.id"],"ip":["geoip:private","geoip:id"]},{"type":"field","outboundTag":"proxy","network":"tcp,udp"}]}}' > app/src/main/assets/custom_routing.json
 
     - name: Pindahkan Hasil Kompilasi Libs ke Modul App
       run: |
