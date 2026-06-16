@@ -388,7 +388,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Format Docker Image Meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@v6
         id: docker_meta
         with:
           images: ghcr.io/${{ steps.repo.outputs.repository }}
