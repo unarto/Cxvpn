@@ -31,6 +31,12 @@
     <color name="md_theme_surfaceVariant">#E0E0E0</color>
     <color name="md_theme_onSurfaceVariant">#49454F</color>
     
+    <!-- Tertiary colors -->
+    <color name="md_theme_tertiary">#4F606E</color>
+    <color name="md_theme_onTertiary">#FFFFFF</color>
+    <color name="md_theme_tertiaryContainer">#D2E4F5</color>
+    <color name="md_theme_onTertiaryContainer">#0B1D29</color>
+
     <!-- Outline & Inverse -->
     <color name="md_theme_outline">#9E9E9E</color>
     <color name="md_theme_outlineVariant">#BDBDBD</color>
