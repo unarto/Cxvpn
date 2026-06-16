@@ -44,58 +44,45 @@ jobs:
 
     - name: Buat Skrip dan Kompilasi libhevtun
       run: |
-        # 1. Tulis ulang skrip compile-hevtun.sh dengan metode salin langsung (bukan symlink)
-        cat << 'EOF' > compile-hevtun.sh
-        #!/bin/bash
-        set -o errexit
-        set -o pipefail
-        set -o nounset
-        __dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-        TMPDIR=$(mktemp -d)
-        clear_tmp () { rm -rf $TMPDIR; }
-        trap 'echo -e "Aborted, error $? in command: $BASH_COMMAND"; trap ERR; clear_tmp; exit 1' ERR INT
+        # Buat folder kerja JNI yang bersih di root
+        mkdir -p jni/hev-socks5-tunnel
+        
+        # 1. Tulis ulang file induk Android.mk secara manual agar NDK tidak tersesat
+        cat << 'EOF' > jni/Android.mk
+        LOCAL_PATH := $(call my-dir)
+        include $(CLEAR_VARS)
 
-        # Deteksi apakah folder submodule ada isinya atau tidak
-        if [ ! -d "$__dir/hev-socks5-tunnel" ] || [ -z "$(ls -A "$__dir/hev-socks5-tunnel" 2>/dev/null)" ]; then
-          echo "ERROR: Folder hev-socks5-tunnel kosong atau tidak ditemukan!"
-          echo "Pastikan submodule git sudah ter-checkout dengan benar."
-          exit 1
+        LOCAL_MODULE := hevtun
+        
+        # Mengambil seluruh source code C dari folder submodule secara rekursif
+        LOCAL_SRC_FILES := $(wildcard hev-socks5-tunnel/src/**/*.c) $(wildcard hev-socks5-tunnel/src/*.c)
+        
+        LOCAL_CFLAGS := -O3 -DPKGNAME=com/example/chatoex/service
+        LOCAL_LDFLAGS := -Wl,--build-id=none -Wl,--hash-style=gnu
+        
+        include $(BUILD_SHARED_LIBRARY)
+        EOF
+
+        # 2. Salin isi file C asli ke folder tujuan (jika submodulnya ada)
+        if [ -d "hev-socks5-tunnel" ]; then
+          cp -r hev-socks5-tunnel/* jni/hev-socks5-tunnel/
         fi
 
-        mkdir -p "$TMPDIR/jni"
-        pushd "$TMPDIR"
-        
-        echo 'include $(call all-subdir-makefiles)' > jni/Android.mk
-        
-        # GANTI JALUR: Salin total folder aslinya ke direktori jni agar terbaca penuh oleh NDK
-        cp -r "$__dir/hev-socks5-tunnel" jni/hev-socks5-tunnel
-
+        # 3. Jalankan perintah ndk-build mandiri dengan target direktori lokal
         $NDK_HOME/ndk-build \
             NDK_PROJECT_PATH=. \
             APP_BUILD_SCRIPT=jni/Android.mk \
             "APP_ABI=armeabi-v7a arm64-v8a" \
             APP_PLATFORM=android-24 \
-            NDK_LIBS_OUT="$TMPDIR/libs" \
-            NDK_OUT="$TMPDIR/obj" \
-            "APP_CFLAGS=-O3 -DPKGNAME=com/example/chatoex/service" \
-            "APP_LDFLAGS=-Wl,--build-id=none -Wl,--hash-style=gnu"
-
-        mkdir -p "$__dir/libs"
-        cp -r "$TMPDIR/libs/"* "$__dir/libs/"
-        popd
-        rm -rf $TMPDIR
-        EOF
-        
-        # 2. Eksekusi skrip kompilasi
-        chmod +x compile-hevtun.sh
-        ./compile-hevtun.sh
+            NDK_LIBS_OUT=libs \
+            NDK_OUT=obj
 
     - name: Download libv2ray AAR & Buat Custom Routing Assets
       run: |
         mkdir -p app/libs
         mkdir -p app/src/main/assets
         
-        # Download Core AAR kustom
+        # Download Core AAR kustom milikmu
         curl -L "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -o app/libs/libv2ray.aar
         
         # Download Data Geografis Routing
