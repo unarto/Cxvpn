@@ -42,18 +42,32 @@ jobs:
         # Suntik ndkVersion & Splits ABI ke dalam build.gradle.kts
         sed -i '/android {/a \    ndkVersion = "28.2.13676358"\n    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
 
-    - name: Kompilasi libhevtun Menggunakan Android.mk Lokal
+    - name: Restore cached libhevtun
+      id: cache-libhevtun-restore
+      uses: actions/cache/restore@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        # Menggunakan hash dari file source C & makefile di dalam submodule (Lebih Akurat!)
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('hev-socks5-tunnel/src/**/*.c', 'hev-socks5-tunnel/Android.mk') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Build libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
       run: |
-        # -C menginstruksikan ndk-build untuk berjalan langsung di dalam folder hve-socks5-tunnel
-        # NDK_LIBS_OUT=../libs akan melempar hasil folder 'libs' (.so) keluar ke direktori utama project
-        $ANDROID_HOME/ndk/28.2.13676358/ndk-build \
-          -C hev-socks5-tunnel \
-          NDK_PROJECT_PATH=. \
-          APP_BUILD_SCRIPT=Android.mk \
-          NDK_LIBS_OUT=../libs \
-          NDK_OUT=../obj \
-          "APP_ABI=armeabi-v7a arm64-v8a" \
-          APP_PLATFORM=android-24
+        bash compile-hevtun.sh
+    
+    - name: Save libhevtun
+      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
+      uses: actions/cache/save@v4
+      with:
+        path: ${{ github.workspace }}/libs
+        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('hev-socks5-tunnel/src/**/*.c', 'hev-socks5-tunnel/Android.mk') }}-${{ hashFiles('compile-hevtun.sh') }}
+
+    - name: Copy libhevtun to Android jniLibs
+      run: |
+        # Buat foldernya terlebih dahulu agar tidak error
+        mkdir -p ${{ github.workspace }}/app/src/main/jniLibs
+        # Copy seluruh isi arsitektur (arm64-v8a, armeabi-v7a) ke folder jniLibs asli
+        cp -r ${{ github.workspace }}/libs/* ${{ github.workspace }}/app/src/main/jniLibs/
 
     - name: Download AAR & Assets
       run: |
