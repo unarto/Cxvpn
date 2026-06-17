@@ -293,7 +293,7 @@ class MainActivity : HelperBaseActivity() {
         if (currentDateStr == savedDate) {
             val todayTx = com.v2ray.ang.handler.MmkvManager.decodeSettingsLong("Traffic_Tx", 0L)
             val todayRx = com.v2ray.ang.handler.MmkvManager.decodeSettingsLong("Traffic_Rx", 0L)
-            binding.tvTrafficUsage.text = "↑ ${com.v2ray.ang.extension.toTrafficString(todayTx)}\n↓ ${com.v2ray.ang.extension.toTrafficString(todayRx)}"
+            binding.tvTrafficUsage.text = "↑ ${todayTx.toTrafficString()}\n↓ ${todayRx.toTrafficString()}"
         } else {
             binding.tvTrafficUsage.text = "↑ 0 B\n↓ 0 B"
         }
