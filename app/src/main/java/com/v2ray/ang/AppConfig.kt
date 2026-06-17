@@ -122,13 +122,13 @@ object AppConfig {
     const val IP_API_URL = "https://api.ip.sb/geoip"
 
     /** DNS server addresses. */
-    const val DNS_PROXY = "1.1.1.1"
-    const val DNS_DIRECT = "223.5.5.5"
-    const val DNS_VPN = "1.1.1.1"
+    const val DNS_PROXY = "94.140.14.14"
+    const val DNS_DIRECT = "94.140.14.14"
+    const val DNS_VPN = "94.140.14.14"
     const val GEOSITE_PRIVATE = "geosite:private"
-    const val GEOSITE_CN = "geosite:cn"
+    const val GEOSITE_CN = "geosite:id"
     const val GEOIP_PRIVATE = "geoip:private"
-    const val GEOIP_CN = "geoip:cn"
+    const val GEOIP_CN = "geoip:id"
 
     /** Ports and addresses for various services. */
     const val PORT_LOCAL_DNS = "10853"
