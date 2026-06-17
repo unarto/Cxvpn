@@ -122,7 +122,7 @@ object AppConfig {
     const val IP_API_URL = "https://api.ip.sb/geoip"
 
     /** DNS server addresses. */
-    const val DNS_PROXY = "94.140.14.14"
+    const val DNS_PROXY = "https://dns.adguard-dns.com/dns-query"
     const val DNS_DIRECT = "94.140.14.14"
     const val DNS_VPN = "94.140.14.14"
     const val GEOSITE_PRIVATE = "geosite:private"
@@ -186,7 +186,7 @@ object AppConfig {
     const val HEVTUN_RW_TIMEOUT = "300,60"
 
     // Google API rule constants
-    const val GOOGLEAPIS_CN_DOMAIN = "domain:googleapis.cn"
+    const val GOOGLEAPIS_CN_DOMAIN = "domain:googleapis.com"
     const val GOOGLEAPIS_COM_DOMAIN = "googleapis.com"
 
     // Android Private DNS constants
@@ -207,8 +207,8 @@ object AppConfig {
     const val REALITY = "reality"
     const val HEADER_TYPE_HTTP = "http"
 
-    val DNS_ALIDNS_ADDRESSES = arrayListOf("223.5.5.5", "223.6.6.6", "2400:3200::1", "2400:3200:baba::1")
-    val DNS_CLOUDFLARE_ONE_ADDRESSES = arrayListOf("1.1.1.1", "1.0.0.1", "2606:4700:4700::1111", "2606:4700:4700::1001")
+    val DNS_ALIDNS_ADDRESSES = arrayListOf("94.140.14.14", "94.140.15.15", "2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff")
+    val DNS_CLOUDFLARE_ONE_ADDRESSES = arrayListOf("94.140.14.15", "94.140.14.16", "2a10:50c0::bad1:ff", "2a10:50c0::bad2:ff")
     val DNS_CLOUDFLARE_DNS_COM_ADDRESSES = arrayListOf("104.16.132.229", "104.16.133.229", "2606:4700::6810:84e5", "2606:4700::6810:85e5")
     val DNS_CLOUDFLARE_DNS_ADDRESSES = arrayListOf("104.16.248.249", "104.16.249.249", "2606:4700::6810:f8f9", "2606:4700::6810:f9f9")
     val DNS_DNSPOD_ADDRESSES = arrayListOf("1.12.12.12", "120.53.53.53")
