@@ -233,7 +233,7 @@
                                             android:layout_marginBottom="4dp"
                                             android:textStyle="bold" />
                                         <TextView
-                                            android:id="@+id/tv_intranet_ip"
+                                            android:id="@+id/tv_provider_ip"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="-"
