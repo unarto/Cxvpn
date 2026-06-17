@@ -38,23 +38,22 @@ jobs:
       run: |
         echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
-        sed -i '10i\        \n    ndkVersion = "28.2.13676358"' "${{ github.workspace }}/app/build.gradle.kts"
-        sed -i '/android {/a \    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
+        
+        # Suntik ndkVersion & Splits ABI ke dalam build.gradle.kts
+        sed -i '/android {/a \    ndkVersion = "28.2.13676358"\n    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
 
-    - name: Buat Skrip dan Kompilasi libhevtun
+    - name: Kompilasi libhevtun Menggunakan Android.mk Lokal
       run: |
-        mkdir -p jni/hev-socks5-tunnel
-        cat << 'EOF' > jni/Android.mk
-        LOCAL_PATH := $(call my-dir)
-        include $(CLEAR_VARS)
-        LOCAL_MODULE := hevtun
-        LOCAL_SRC_FILES := $(wildcard hev-socks5-tunnel/src/**/*.c) $(wildcard hev-socks5-tunnel/src/*.c)
-        LOCAL_CFLAGS := -O3 -DPKGNAME=com_v2ray_ang_service
-        LOCAL_LDFLAGS := -Wl,--build-id=none -Wl,--hash-style=gnu
-        include $(BUILD_SHARED_LIBRARY)
-        EOF
-        if [ -d "hev-socks5-tunnel" ]; then cp -r hev-socks5-tunnel/* jni/hev-socks5-tunnel/; fi
-        $NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=jni/Android.mk "APP_ABI=armeabi-v7a arm64-v8a" APP_PLATFORM=android-24 NDK_LIBS_OUT=libs NDK_OUT=obj
+        # -C menginstruksikan ndk-build untuk berjalan langsung di dalam folder hve-socks5-tunnel
+        # NDK_LIBS_OUT=../libs akan melempar hasil folder 'libs' (.so) keluar ke direktori utama project
+        $ANDROID_HOME/ndk/28.2.13676358/ndk-build \
+          -C hev-socks5-tunnel \
+          NDK_PROJECT_PATH=. \
+          APP_BUILD_SCRIPT=Android.mk \
+          NDK_LIBS_OUT=../libs \
+          NDK_OUT=../obj \
+          "APP_ABI=armeabi-v7a arm64-v8a" \
+          APP_PLATFORM=android-24
 
     - name: Download AAR & Assets
       run: |
@@ -78,18 +77,18 @@ jobs:
     - name: Upload Semua Hasil Split APK
       uses: actions/upload-artifact@v4
       with:
-        name: cemplung-vpn-split-apks
+        name: cemplung-vpn-all-apks
         path: app/build/outputs/apk/debug/**/*.apk
-    # --- STEP UPLOAD DIPISAH BERDASARKAN ARSITEKTUR ---
     
+    # --- STEP UPLOAD DIPISAH BERDASARKAN ARSITEKTUR ---
     - name: Upload Artifact ARM64 (v8a)
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-arm64-v8a
-        path: app/build/outputs/apk/debug/*arm64*.apk
+        path: app/build/outputs/apk/debug/**/*arm64*.apk
 
     - name: Upload Artifact ARMV7A (v7a)
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-armeabi-v7a
-        path: app/build/outputs/apk/debug/*v7a*.apk
+        path: app/build/outputs/apk/debug/**/*v7a*.apk
