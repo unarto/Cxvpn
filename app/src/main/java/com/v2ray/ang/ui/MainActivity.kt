@@ -166,7 +166,23 @@ class MainActivity : HelperBaseActivity() {
             }
             binding.tvNetworkIp.text = if (networkIp.isNotEmpty()) networkIp else "-"
             val tunIp = getIpAddress("tun")
-            binding.tvIntranetIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+            // Fetch public IP address
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val url = java.net.URL("https://api.ipify.org")
+                    val connection = url.openConnection()
+                    connection.connectTimeout = 5000
+                    connection.readTimeout = 5000
+                    val publicIp = connection.getInputStream().bufferedReader().use { it.readText() }
+                    withContext(Dispatchers.Main) {
+                        binding.tvProviderIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        binding.tvProviderIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+                    }
+                }
+            }
         }
         mainViewModel.startListenBroadcast()
         mainViewModel.initAssets(assets)
@@ -306,7 +322,23 @@ class MainActivity : HelperBaseActivity() {
             val networkIp = getIpAddress("net")
             binding.tvNetworkIp.text = if (networkIp.isNotEmpty()) networkIp else "-"
             val tunIp = getIpAddress("tun")
-            binding.tvIntranetIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+            // Fetch public IP address
+            lifecycleScope.launch(Dispatchers.IO) {
+                try {
+                    val url = java.net.URL("https://api.ipify.org")
+                    val connection = url.openConnection()
+                    connection.connectTimeout = 5000
+                    connection.readTimeout = 5000
+                    val publicIp = connection.getInputStream().bufferedReader().use { it.readText() }
+                    withContext(Dispatchers.Main) {
+                        binding.tvProviderIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
+                    }
+                } catch (e: Exception) {
+                    withContext(Dispatchers.Main) {
+                        binding.tvProviderIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+                    }
+                }
+            }
         }
 
         val routingMode = com.v2ray.ang.handler.MmkvManager.decodeSettingsString(com.v2ray.ang.AppConfig.PREF_ROUTING_DOMAIN_STRATEGY) ?: "IPIfNonMatch"
