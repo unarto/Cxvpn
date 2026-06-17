@@ -1,4 +1,4 @@
-name: Build APK Mandiri
+name: Build APk baru
 
 on:
   workflow_dispatch:
