@@ -259,4 +259,19 @@ object AppConfig {
         "Chocolate4U/Iran-v2ray-rules"
     )
 
+    // =================================================================
+    // KODE DNS YANG SUDAH MATI TOTAL (DIALIKHKAN KE DNS DIRECT)
+    // =================================================================
+    const val DNS_CLOUDFLARE_ONE_DOMAIN = "dns.adguard-dns.com"
+    const val DNS_CLOUDFLARE_ONE_ADDRESSES = "94.140.14.14"
+
+    const val DNS_CLOUDFLARE_DNS_DOMAIN = "dns.adguard-dns.com"
+    const val DNS_CLOUDFLARE_DNS_ADDRESSES = "94.140.14.14"
+
+    const val DNS_DNSPOD_DOMAIN = "dns.adguard-dns.com"
+    const val DNS_DNSPOD_ADDRESSES = "94.140.14.14"
+
+    const val DNS_YANDEX_DOMAIN = "dns.adguard-dns.com"
+    const val DNS_YANDEX_ADDRESSES = "94.140.14.14"
+
 }
