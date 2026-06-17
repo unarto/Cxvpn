@@ -190,14 +190,10 @@ object AppConfig {
     const val GOOGLEAPIS_COM_DOMAIN = "googleapis.com"
 
     // Android Private DNS constants
-    const val DNS_DNSPOD_DOMAIN = "dot.pub"
-    const val DNS_ALIDNS_DOMAIN = "dns.alidns.com"
-    const val DNS_CLOUDFLARE_ONE_DOMAIN = "one.one.one.one"
-    const val DNS_CLOUDFLARE_DNS_COM_DOMAIN = "dns.cloudflare.com"
-    const val DNS_CLOUDFLARE_DNS_DOMAIN = "cloudflare-dns.com"
+    const val DNS_ALIDNS_DOMAIN = "dns.quad9.net"
+    const val DNS_CLOUDFLARE_DNS_COM_DOMAIN = "dns.quad9.net"
     const val DNS_GOOGLE_DOMAIN = "dns.google"
     const val DNS_QUAD9_DOMAIN = "dns.quad9.net"
-    const val DNS_YANDEX_DOMAIN = "common.dot.dns.yandex.net"
 
     const val DEFAULT_PORT = 443
     const val DEFAULT_SECURITY = "auto"
