@@ -208,13 +208,9 @@ object AppConfig {
     const val HEADER_TYPE_HTTP = "http"
 
     val DNS_ALIDNS_ADDRESSES = arrayListOf("94.140.14.14", "94.140.15.15", "2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff")
-    val DNS_CLOUDFLARE_ONE_ADDRESSES = arrayListOf("94.140.14.15", "94.140.14.16", "2a10:50c0::bad1:ff", "2a10:50c0::bad2:ff")
-    val DNS_CLOUDFLARE_DNS_COM_ADDRESSES = arrayListOf("104.16.132.229", "104.16.133.229", "2606:4700::6810:84e5", "2606:4700::6810:85e5")
-    val DNS_CLOUDFLARE_DNS_ADDRESSES = arrayListOf("104.16.248.249", "104.16.249.249", "2606:4700::6810:f8f9", "2606:4700::6810:f9f9")
-    val DNS_DNSPOD_ADDRESSES = arrayListOf("1.12.12.12", "120.53.53.53")
+    val DNS_CLOUDFLARE_DNS_COM_ADDRESSES = arrayListOf("45.90.28.167", "45.90.30.167", "2a07:a8c0::", "2a07:a8c0::")
     val DNS_GOOGLE_ADDRESSES = arrayListOf("8.8.8.8", "8.8.4.4", "2001:4860:4860::8888", "2001:4860:4860::8844")
     val DNS_QUAD9_ADDRESSES = arrayListOf("9.9.9.9", "149.112.112.112", "2620:fe::fe", "2620:fe::9")
-    val DNS_YANDEX_ADDRESSES = arrayListOf("77.88.8.8", "77.88.8.1", "2a02:6b8::feed:0ff", "2a02:6b8:0:1::feed:0ff")
 
     //minimum list https://serverfault.com/a/304791
     val ROUTED_IP_LIST = arrayListOf(
