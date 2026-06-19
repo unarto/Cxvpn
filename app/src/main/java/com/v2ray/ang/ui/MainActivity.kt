@@ -2,6 +2,7 @@ package com.v2ray.ang.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -564,7 +565,7 @@ class MainActivity : HelperBaseActivity() {
             if (servers.isNotEmpty()) {
                 val sb = StringBuilder()
                 for (server in servers) {
-                    sb.append(Utils.getURL(server)).append("\n")
+                    sb.append(AngConfigManager.shareConfig(server.guid)).append("\n")
                 }
                 val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 val clip = ClipData.newPlainText("v2ray_configs", sb.toString())
