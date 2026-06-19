@@ -342,8 +342,8 @@
     <string name="connection_not_connected">Not connected</string>
     <string name="connection_runing_task_left">Number of running test tasks: %s</string>
 
-    <import_subscription_success>Subscription imported Successfully</import_subscription_success>
-    <import_subscription_failure>Import subscription failed</import_subscription_failure>
+    <string name="import_subscription_success">Subscription imported Successfully</string>
+    <string name="import_subscription_failure">Import subscription failed</string>
     <string name="title_fragment_settings">Fragment Settings</string>
     <string name="title_pref_fragment_packets">Fragment Packets</string>
     <string name="title_pref_fragment_length">Fragment Length (min-max)</string>
