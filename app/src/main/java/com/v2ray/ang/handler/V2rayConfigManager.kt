@@ -1133,6 +1133,15 @@ object V2rayConfigManager {
                     streamSettings = StreamSettingsBean()
                 )
 
+            EConfigType.HYSTERIAUDP ->
+                return OutboundBean(
+                    protocol = EConfigType.HYSTERIA.name.lowercase(),
+                    settings = OutSettingsBean(
+                        servers = null
+                    ),
+                    streamSettings = StreamSettingsBean()
+                )
+
             EConfigType.CUSTOM -> null
             EConfigType.POLICYGROUP -> null
         }
