@@ -373,66 +373,66 @@
     <string name="title_webdav_pass">Password</string>
     <string name="title_webdav_remote_path">Remote directory (optional)</string>
 
-    <value-array name="share_method">
+    <string-array name="share_method">
         <item>QRcode</item>
         <item>Export to clipboard</item>
         <item>Export full config to clipboard</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="share_method_more">
+    <string-array name="share_method_more">
         <item>QRcode</item>
         <item>Export to clipboard</item>
         <item>Export full config to clipboard</item>
         <item>Edit</item>
         <item>Delete</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="share_sub_method">
+    <string-array name="share_sub_method">
         <item>QRcode</item>
         <item>Export to clipboard</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="mode_entries">
+    <string-array name="mode_entries">
         <item>VPN</item>
         <item>Proxy only</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="ui_mode_night">
+    <string-array name="ui_mode_night">
         <item>Follow system</item>
         <item>Light</item>
         <item>Dark</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="preset_rulesets">
+    <string-array name="preset_rulesets">
         <item>China Whitelist</item>
         <item>China Blacklist</item>
         <item>Global</item>
         <item>Iran Whitelist</item>
         <item>Russia Whitelist</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="vpn_bypass_lan">
+    <string-array name="vpn_bypass_lan">
         <item>Follow config</item>
         <item>Bypass</item>
         <item>Not Bypass</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="outbound_domain_resolve_method">
+    <string-array name="outbound_domain_resolve_method">
         <item>Do not resolve</item>
         <item>Resolve and add to DNS Hosts</item>
         <item>Resolve and replace domain</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="policy_group_type">
+    <string-array name="policy_group_type">
         <item>Least Ping</item>
         <item>Least Load</item>
         <item>Random</item>
         <item>Round Robin</item>
-    </value-array>
+    </string-array>
 
-    <value-array name="config_backup_options">
+    <string-array name="config_backup_options">
         <item>Local</item>
         <item>WebDAV</item>
-    </value-array>
+    </string-array>
 
 </resources>
