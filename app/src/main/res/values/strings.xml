@@ -47,6 +47,7 @@
     <string name="menu_export_all">Export All Config</string>
     <string name="del_all_config_comfirm">Confirm delete all configs?</string>
     <string name="copied_to_clipboard">Copied all configs to clipboard</string>
+    <string name="server_lab_remarks">remarks</string>
     <string name="server_lab_address">address</string>
     <string name="server_lab_port">port</string>
     <string name="server_lab_id">id</string>
@@ -372,66 +373,66 @@
     <string name="title_webdav_pass">Password</string>
     <string name="title_webdav_remote_path">Remote directory (optional)</string>
 
-    <string-array name="share_method">
+    <value-array name="share_method">
         <item>QRcode</item>
         <item>Export to clipboard</item>
         <item>Export full config to clipboard</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="share_method_more">
+    <value-array name="share_method_more">
         <item>QRcode</item>
         <item>Export to clipboard</item>
         <item>Export full config to clipboard</item>
         <item>Edit</item>
         <item>Delete</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="share_sub_method">
+    <value-array name="share_sub_method">
         <item>QRcode</item>
         <item>Export to clipboard</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="mode_entries">
+    <value-array name="mode_entries">
         <item>VPN</item>
         <item>Proxy only</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="ui_mode_night">
+    <value-array name="ui_mode_night">
         <item>Follow system</item>
         <item>Light</item>
         <item>Dark</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="preset_rulesets">
+    <value-array name="preset_rulesets">
         <item>China Whitelist</item>
         <item>China Blacklist</item>
         <item>Global</item>
         <item>Iran Whitelist</item>
         <item>Russia Whitelist</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="vpn_bypass_lan">
+    <value-array name="vpn_bypass_lan">
         <item>Follow config</item>
         <item>Bypass</item>
         <item>Not Bypass</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="outbound_domain_resolve_method">
+    <value-array name="outbound_domain_resolve_method">
         <item>Do not resolve</item>
         <item>Resolve and add to DNS Hosts</item>
         <item>Resolve and replace domain</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="policy_group_type">
+    <value-array name="policy_group_type">
         <item>Least Ping</item>
         <item>Least Load</item>
         <item>Random</item>
         <item>Round Robin</item>
-    </string-array>
+    </value-array>
 
-    <string-array name="config_backup_options">
+    <value-array name="config_backup_options">
         <item>Local</item>
         <item>WebDAV</item>
-    </string-array>
+    </value-array>
 
 </resources>
