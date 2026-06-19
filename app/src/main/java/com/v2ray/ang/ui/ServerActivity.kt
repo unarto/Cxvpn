@@ -164,7 +164,8 @@ class ServerActivity : BaseActivity() {
             EConfigType.VLESS -> R.layout.activity_server_vless
             EConfigType.TROJAN -> R.layout.activity_server_trojan
             EConfigType.WIREGUARD -> R.layout.activity_server_wireguard
-            EConfigType.HYSTERIA2 -> R.layout.activity_server_hysteria2
+            EConfigType.HYSTERIA2,
+            EConfigType.HYSTERIAUDP -> R.layout.activity_server_hysteria2
             EConfigType.POLICYGROUP -> null
             else -> null
         } ?: return
@@ -382,7 +383,7 @@ class ServerActivity : BaseActivity() {
             et_maxConnReceiveWindow?.text = Utils.getEditable(config.maxConnReceiveWindow?.toString())
             et_maxIdleTimeout?.text = Utils.getEditable(config.maxIdleTimeout)
             et_maxIncomingStreams?.text = Utils.getEditable(config.maxIncomingStreams?.toString())
-            cb_disablePathMTUDiscovery?.isChecked = config.disablePathMTUDiscovery ?: false
+            cb_disablePathMTUDiscovery?.let { it.isChecked = config.disablePathMTUDiscovery ?: false }
             et_port_hop?.text = Utils.getEditable(config.portHopping)
             et_port_hop_interval?.text = Utils.getEditable(config.portHoppingInterval)
             et_pinsha256?.text = Utils.getEditable(config.pinSHA256)
@@ -558,7 +559,7 @@ class ServerActivity : BaseActivity() {
             config.maxConnReceiveWindow = Utils.parseInt(et_maxConnReceiveWindow?.text?.toString())
             config.maxIdleTimeout = et_maxIdleTimeout?.text?.toString()
             config.maxIncomingStreams = Utils.parseInt(et_maxIncomingStreams?.text?.toString())
-            config.disablePathMTUDiscovery = cb_disablePathMTUDiscovery?.isChecked
+            config.disablePathMTUDiscovery = cb_disablePathMTUDiscovery?.isChecked ?: false
             config.portHopping = et_port_hop?.text?.toString()
             config.portHoppingInterval = et_port_hop_interval?.text?.toString()
             config.pinSHA256 = et_pinsha256?.text?.toString()

@@ -65,4 +65,8 @@
         <item name="colorPrimary">@color/color_fab_active</item>
     </style>
 
+    <style name="BottomNavTextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

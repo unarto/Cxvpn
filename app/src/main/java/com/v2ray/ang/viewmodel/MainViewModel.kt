@@ -44,6 +44,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val isRunning by lazy { MutableLiveData<Boolean>() }
     val updateListAction by lazy { MutableLiveData<Int>() }
     val updateTestResultAction by lazy { MutableLiveData<String>() }
+    val uiRefreshAction by lazy { MutableLiveData<Boolean>() }
     data class TrafficData(val txSpeed: Long, val rxSpeed: Long, val totalTx: Long, val totalRx: Long, val appMemory: Long)
     val updateTrafficAction by lazy { MutableLiveData<TrafficData>() }
     private val tcpingTestScope by lazy { CoroutineScope(Dispatchers.IO) }
@@ -130,13 +131,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @param toPosition The target position of the server.
      */
     fun swapServer(fromPosition: Int, toPosition: Int) {
-        if (subscriptionId.isEmpty()) {
-            Collections.swap(serverList, fromPosition, toPosition)
-        } else {
-            val fromPosition2 = serverList.indexOf(serversCache[fromPosition].guid)
-            val toPosition2 = serverList.indexOf(serversCache[toPosition].guid)
-            Collections.swap(serverList, fromPosition2, toPosition2)
-        }
+        val fromPosition2 = serverList.indexOf(serversCache[fromPosition].guid)
+        val toPosition2 = serverList.indexOf(serversCache[toPosition].guid)
+        Collections.swap(serverList, fromPosition2, toPosition2)
         Collections.swap(serversCache, fromPosition, toPosition)
         MmkvManager.encodeServerList(serverList)
     }
@@ -149,26 +146,24 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         serversCache.clear()
         for (guid in serverList) {
             val profile = MmkvManager.decodeServerConfig(guid) ?: continue
-//            var profile = MmkvManager.decodeProfileConfig(guid)
-//            if (profile == null) {
-//                val config = MmkvManager.decodeServerConfig(guid) ?: continue
-//                profile = ProfileLiteItem(
-//                    configType = config.configType,
-//                    subscriptionId = config.subscriptionId,
-//                    remarks = config.remarks,
-//                    server = config.getProxyOutbound()?.getServerAddress(),
-//                    serverPort = config.getProxyOutbound()?.getServerPort(),
-//                )
-//                MmkvManager.encodeServerConfig(guid, config)
-//            }
 
-            if (subscriptionId.isNotEmpty() && subscriptionId != profile.subscriptionId) {
+            if (subscriptionId != profile.subscriptionId) {
                 continue
             }
 
             if (keywordFilter.isEmpty() || profile.remarks.lowercase().contains(keywordFilter.lowercase())) {
                 serversCache.add(ServersCache(guid, profile))
             }
+        }
+
+        val sort = MmkvManager.decodeSettingsString("pref_server_sort", "default")
+        if (sort == "delay") {
+            serversCache.sortWith(compareBy<ServersCache> { 
+                val delay = MmkvManager.decodeServerAffiliationInfo(it.guid)?.testDelayMillis ?: 0L
+                if (delay <= 0L) Long.MAX_VALUE else delay
+            }.thenBy { it.profile.remarks.lowercase() })
+        } else if (sort == "name") {
+            serversCache.sortBy { it.profile.remarks.lowercase() }
         }
     }
 
@@ -190,12 +185,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @return The number of exported servers.
      */
     fun exportAllServer(): Int {
-        val serverListCopy =
-            if (subscriptionId.isEmpty() && keywordFilter.isEmpty()) {
-                serverList
-            } else {
-                serversCache.map { it.guid }.toList()
-            }
+        val serverListCopy = serversCache.map { it.guid }.toList()
 
         val ret = AngConfigManager.shareNonCustomConfigsToClipboard(
             getApplication<AngApplication>(),
@@ -336,17 +326,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      * @return The number of removed servers.
      */
     fun removeAllServer(): Int {
-        val count =
-            if (subscriptionId.isEmpty() && keywordFilter.isEmpty()) {
-                MmkvManager.removeAllServer()
-            } else {
-                val serversCopy = serversCache.toList()
-                for (item in serversCopy) {
-                    MmkvManager.removeServer(item.guid)
-                }
-                serversCache.toList().count()
-            }
-        return count
+        val serversCopy = serversCache.toList()
+        for (item in serversCopy) {
+            MmkvManager.removeServer(item.guid)
+        }
+        return serversCopy.size
     }
 
     /**
@@ -355,13 +339,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun removeInvalidServer(): Int {
         var count = 0
-        if (subscriptionId.isEmpty() && keywordFilter.isEmpty()) {
-            count += MmkvManager.removeInvalidServer("")
-        } else {
-            val serversCopy = serversCache.toList()
-            for (item in serversCopy) {
-                count += MmkvManager.removeInvalidServer(item.guid)
-            }
+        val serversCopy = serversCache.toList()
+        for (item in serversCopy) {
+            count += MmkvManager.removeInvalidServer(item.guid)
         }
         return count
     }

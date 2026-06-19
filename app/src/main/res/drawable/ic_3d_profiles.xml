@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Ambient Shadow -->
+    <path
+        android:pathData="M2,21 C6,22.5 18,22.5 22,21 L12,19 Z"
+        android:fillColor="#15000000" />
+
+    <!-- Folder Back Plate (Solid cyber blue) -->
+    <path
+        android:pathData="M2,18 L2,7 C2,5.9 2.9,5 4,5 L9.5,5 C10.1,5 10.7,5.3 11,5.8 L13,8.5 L20,8.5 C21.1,8.5 22,9.4 22,10.5 L22,18 Z"
+        android:fillColor="#FF0D47A1" />
+
+    <!-- Emerging Glowing Config Sheets (Floating inside folder) -->
+    <!-- Sheet 1 (Cyan Neon Document emerging) -->
+    <path
+        android:pathData="M7,12 L11,10 L17,14 L13,16 Z"
+        android:fillColor="#FF00FFFF" />
+    <path
+        android:pathData="M8,11 L12,9 L18,13 L14,15 Z"
+        android:fillColor="#B3FFFFFF" />
+
+    <!-- Sheet 2 (Pink Neon Document emerging further back) -->
+    <path
+        android:pathData="M10,8 L14,6 L18,9 L14,11 Z"
+        android:fillColor="#85FF00FF" />
+
+    <!-- Folder Front Flap (Glassmorphism Pocket Layer) -->
+    <!-- This overlay has deep turquoise semi-transparency for the frosted glass effect -->
+    <path
+        android:pathData="M2,18 L2,10.5 C2,9.4 2.9,8.5 4,8.5 L20,8.5 C21.1,8.5 22,9.4 22,10.5 L22,18 C22,19.1 21.1,20 20,20 L4,20 C2.9,20 2,19.1 2,18 Z"
+        android:fillColor="#6600E5FF"
+        android:strokeColor="#B300FFFF"
+        android:strokeWidth="1.2" />
+
+    <!-- Glossy Highlight / Reflection line on folder edge -->
+    <path
+        android:pathData="M3,10 L10,10 C10.5,10 11,9.8 11.2,9.4 L12.5,7.5"
+        android:strokeColor="#E6FFFFFF"
+        android:strokeWidth="1" />
+</vector>

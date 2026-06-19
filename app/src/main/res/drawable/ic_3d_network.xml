@@ -1,0 +1,51 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Ambient circular waves -->
+    <path
+        android:pathData="M16 16m-12 0a12 12 0 1 1 24 0a12 12 0 1 1 -24 0"
+        android:strokeColor="#1A00FFFF"
+        android:strokeWidth="1.5" />
+    <path
+        android:pathData="M16 16m-8 0a8 8 0 1 1 16 0a8 8 0 1 1 -16 0"
+        android:strokeColor="#3300FFFF"
+        android:strokeWidth="1" />
+
+    <!-- 3D Pyramid Base -->
+    <!-- Left Face (Shadow dark blue) -->
+    <path
+        android:pathData="M16 8 L10 23 L16 26 Z"
+        android:fillColor="#FF0D47A1" />
+    <!-- Right Face (Bright blue/neon) -->
+    <path
+        android:pathData="M16 8 L16 26 L22 23 Z"
+        android:fillColor="#FF1976D2" />
+
+    <!-- Isometric Glowing Crosslines -->
+    <path
+        android:pathData="M13 15.5 L19 15.5"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1.2" />
+    <path
+        android:pathData="M11.5 20 L20.5 20"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1.2" />
+
+    <!-- Floating Hot-Pink Neon Beacon Core on Top -->
+    <path
+        android:pathData="M16 8m-2.5 0a2.5 2.5 0 1 1 5 0a2.5 2.5 0 1 1 -5 0"
+        android:fillColor="#FFD500F9" />
+    <path
+        android:pathData="M16 8m-1 0a1 1 0 1 1 2 0a1 1 0 1 1 -2 0"
+        android:fillColor="#FFFFFF" />
+
+    <!-- Upper Signal Radiance (Semi-transparent Glass waves) -->
+    <path
+        android:pathData="M12 4 C14 2 18 2 20 4"
+        android:strokeColor="#E600FFFF"
+        android:strokeWidth="2"
+        android:strokeLineCap="round" />
+</vector>

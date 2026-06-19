@@ -3,6 +3,10 @@ package com.v2ray.ang.ui
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.v2ray.ang.R
 import com.v2ray.ang.databinding.ActivityHotshareBinding
 import com.v2ray.ang.handler.MmkvManager
@@ -21,24 +25,7 @@ class HotshareActivity : BaseActivity() {
         title = "Hotshare"
 
         updateProxyInfo()
-
-        binding.btnStartHotspot.setOnClickListener {
-            val intent = Intent(Intent.ACTION_MAIN)
-            intent.setClassName("com.android.settings", "com.android.settings.TetherSettings")
-            try {
-                startActivity(intent)
-            } catch (e: Exception) {
-                try {
-                    startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
-                } catch(e2: Exception) {
-                    startActivity(Intent(Settings.ACTION_SETTINGS))
-                }
-            }
-        }
-
-        binding.btnStartRepeater.setOnClickListener {
-            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
-        }
+        updateHotspotInfoViaRoot()
 
         val autoOff = MmkvManager.decodeSettingsBool("pref_hotshare_auto_off", true)
         binding.cbAutoTurnOff.isChecked = autoOff
@@ -74,6 +61,61 @@ class HotshareActivity : BaseActivity() {
         binding.tvProxyIp.text = if(ip.isNotEmpty()) ip else "-"
     }
     
+    private fun updateHotspotInfoViaRoot() {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val ssidAndPass = getHotspotInfoViaRoot()
+            withContext(Dispatchers.Main) {
+                if (ssidAndPass != null) {
+                    binding.tvSsid.text = ssidAndPass.first
+                    binding.tvPassword.text = if(ssidAndPass.second.isNotEmpty()) ssidAndPass.second else "None"
+                } else {
+                    binding.tvSsid.text = "Tidak diketahui (butuh root)"
+                    binding.tvPassword.text = "Tidak diketahui"
+                }
+            }
+        }
+    }
+
+    private fun getHotspotInfoViaRoot(): Pair<String, String>? {
+        if (!com.topjohnwu.superuser.Shell.getShell().isRoot) return null
+        
+        var ssid = ""
+        var pass = ""
+        try {
+            val res = com.topjohnwu.superuser.Shell.cmd("dumpsys wifi | grep -E 'mSsid|SSID|mPassphrase|Passphrase'").exec().out
+            for (line in res) {
+                val trimmed = line.trim()
+                if (trimmed.startsWith("SSID:") || trimmed.startsWith("mSsid=")) {
+                    val s = trimmed.substringAfter(":").substringAfter("=").trim().removeSurrounding("\"")
+                    if (s.isNotEmpty()) ssid = s
+                }
+                if (trimmed.startsWith("Passphrase:") || trimmed.startsWith("mPassphrase=")) {
+                    val p = trimmed.substringAfter(":").substringAfter("=").trim().removeSurrounding("\"")
+                    pass = if (p == "<null>") "" else p
+                }
+            }
+            if (ssid.isEmpty() || pass.isEmpty()) {
+                val xml1 = com.topjohnwu.superuser.Shell.cmd("cat /data/misc/apexdata/com.android.wifi/WifiConfigStoreSoftAp.xml").exec().out.joinToString("\n")
+                val ssidMatch = Regex("""<string name="SSID">&quot;(.*?)&quot;</string>""").find(xml1) ?: Regex("""<string name="SSID">([^<]+)</string>""").find(xml1)
+                val passMatch = Regex("""<string name="PreSharedKey">&quot;(.*?)&quot;</string>""").find(xml1)
+                if (ssidMatch != null) ssid = ssidMatch.groupValues[1]
+                if (passMatch != null) pass = passMatch.groupValues[1]
+            }
+            if (ssid.isEmpty() || pass.isEmpty()) {
+                val xml2 = com.topjohnwu.superuser.Shell.cmd("cat /data/misc/wifi/softap.conf").exec().out.joinToString("\n")
+                val ssidMatch = Regex("""ssid=([^\n]+)""").find(xml2)
+                val passMatch = Regex("""wpa_passphrase=([^\n]+)""").find(xml2)
+                if (ssidMatch != null) ssid = ssidMatch.groupValues[1]
+                if (passMatch != null) pass = passMatch.groupValues[1]
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        
+        if (ssid.isEmpty() || ssid == "<unknown ssid>") return null
+        return Pair(ssid, pass)
+    }
+
     private fun getIpAddress(type: String): String {
         try {
             val interfaces = java.net.NetworkInterface.getNetworkInterfaces()

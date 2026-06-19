@@ -1,10 +1,7 @@
-name: Build APK Mandiri
+name: Build APk baru
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
+  workflow_dispatch: # Sah! Cuma jalan kalau diklik manual dari web GitHub
 
 jobs:
   build:
@@ -38,49 +35,13 @@ jobs:
       run: |
         echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --install "ndk;28.2.13676358"
         echo "NDK_HOME=$ANDROID_HOME/ndk/28.2.13676358" >> $GITHUB_ENV
-        
-        # Suntik ndkVersion & Splits ABI ke dalam build.gradle.kts
-        sed -i '/android {/a \    ndkVersion = "28.2.13676358"\n    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
-
-    - name: Restore cached libhevtun
-      id: cache-libhevtun-restore
-      uses: actions/cache/restore@v4
-      with:
-        path: ${{ github.workspace }}/libs
-        # Menggunakan hash dari file source C & makefile di dalam submodule (Lebih Akurat!)
-        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('hev-socks5-tunnel/src/**/*.c', 'hev-socks5-tunnel/Android.mk') }}-${{ hashFiles('compile-hevtun.sh') }}
-
-    - name: Build libhevtun
-      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
-      run: |
-        bash compile-hevtun.sh
-    
-    - name: Save libhevtun
-      if: steps.cache-libhevtun-restore.outputs.cache-hit != 'true'
-      uses: actions/cache/save@v4
-      with:
-        path: ${{ github.workspace }}/libs
-        key: libhevtun-${{ runner.os }}-${{ env.NDK_HOME }}-${{ hashFiles('hev-socks5-tunnel/src/**/*.c', 'hev-socks5-tunnel/Android.mk') }}-${{ hashFiles('compile-hevtun.sh') }}
-
-    - name: Copy libhevtun to Android jniLibs
-      run: |
-        # Buat foldernya terlebih dahulu agar tidak error
-        mkdir -p ${{ github.workspace }}/app/src/main/jniLibs
-        # Copy seluruh isi arsitektur (arm64-v8a, armeabi-v7a) ke folder jniLibs asli
-        cp -r ${{ github.workspace }}/libs/* ${{ github.workspace }}/app/src/main/jniLibs/
+        sed -i '10i\        \n    ndkVersion = "28.2.13676358"' "${{ github.workspace }}/app/build.gradle.kts"
+        sed -i '/android {/a \    splits { abi { isEnable = true; reset(); include("armeabi-v7a", "arm64-v8a"); isUniversalApk = false } }' "${{ github.workspace }}/app/build.gradle.kts"
 
     - name: Download AAR & Assets
       run: |
         mkdir -p app/libs app/src/main/assets
-        wget -q "https://github.com/unarto/Xraycorev26.1.3/releases/download/V26.1.23/libv2ray.aar" -O app/libs/libv2ray.aar || true
-        wget -q "https://github.com/v2fly/geoip/releases/latest/download/geoip.dat" -O app/src/main/assets/geoip.dat || true
-        wget -q "https://github.com/v2fly/geosite/releases/latest/download/geosite.dat" -O app/src/main/assets/geosite.dat || true
-        echo '{"routing":{"domainStrategy":"IPIfNonMatch","rules":[{"type":"field","outboundTag":"block","domain":["geosite:category-ads-all"]},{"type":"field","outboundTag":"direct","domain":["geosite:google","domain:id","domain:go.id"],"ip":["geoip:private","geoip:id"]},{"type":"field","outboundTag":"proxy","network":"tcp,udp"}]}}' > app/src/main/assets/custom_routing.json
-
-    - name: Pindahkan Hasil Kompilasi Libs ke Modul App
-      run: |
-        mkdir -p app/src/main/jniLibs
-        if [ -d "libs" ]; then cp -r libs/* app/src/main/jniLibs/; fi
+        wget -q "https://github.com/unarto/Xraycorev26.1.3/releases/download/V1.0.0/libv2ray.aar" -O app/libs/libv2ray.aar || true
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -88,21 +49,18 @@ jobs:
     - name: Build APK Split via Gradle
       run: ./gradlew assembleDebug
 
-    - name: Upload Semua Hasil Split APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: cemplung-vpn-all-apks
-        path: app/build/outputs/apk/debug/**/*.apk
-    
-    # --- STEP UPLOAD DIPISAH BERDASARKAN ARSITEKTUR ---
     - name: Upload Artifact ARM64 (v8a)
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-arm64-v8a
-        path: app/build/outputs/apk/debug/**/*arm64*.apk
+        path: |
+          app/build/outputs/apk/debug/*arm64-v8a*.apk
+          app/build/outputs/apk/debug/**/*arm64-v8a*.apk
 
     - name: Upload Artifact ARMV7A (v7a)
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-armeabi-v7a
-        path: app/build/outputs/apk/debug/**/*v7a*.apk
+        path: |
+          app/build/outputs/apk/debug/*armeabi-v7a*.apk
+          app/build/outputs/apk/debug/**/*armeabi-v7a*.apk

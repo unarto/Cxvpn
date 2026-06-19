@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Bottom plate shadow -->
+    <path
+        android:pathData="M5 21 L16 27 L27 21 L16 15 Z"
+        android:fillColor="#20000000" />
+
+    <!-- Main Module Plate (Isometric Board Layout) -->
+    <!-- Extruded under-layer -->
+    <path
+        android:pathData="M6 21 L16 26 L16 28 L6 23 Z"
+        android:fillColor="#FF004D40" />
+    <path
+        android:pathData="M16 26 L26 21 L26 23 L16 28 Z"
+        android:fillColor="#FF00332C" />
+    <!-- Top Circuit Face (Deep Emerald Glass) -->
+    <path
+        android:pathData="M6 21 L16 26 L26 21 L16 16 Z"
+        android:fillColor="#80004D40"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1" />
+
+    <!-- DRAM Floating Memory Cells (3D Blocks on board) -->
+    <!-- Left Slab Block -->
+    <path
+        android:pathData="M10 19 L13 20.5 L13 22 L10 20.5 Z"
+        android:fillColor="#FF00838F" />
+    <path
+        android:pathData="M13 20.5 L16 19 L16 20.5 L13 22 Z"
+        android:fillColor="#FF006064" />
+    <path
+        android:pathData="M10 19 L13 20.5 L16 19 L13 17.5 Z"
+        android:fillColor="#E000FFFF" />
+
+    <!-- Right Slab Block -->
+    <path
+        android:pathData="M16 22 L19 23.5 L19 25 L16 23.5 Z"
+        android:fillColor="#FF00838F" />
+    <path
+        android:pathData="M19 23.5 L22 22 L22 23.5 L19 25 Z"
+        android:fillColor="#FF006064" />
+    <path
+        android:pathData="M16 22 L19 23.5 L22 22 L19 20.5 Z"
+        android:fillColor="#E000FFFF" />
+
+    <!-- Glowing golden circuit traces -->
+    <path
+        android:pathData="M11 23.5 L14 25 M12 24 L15 25.5"
+        android:strokeColor="#FFFFD54F"
+        android:strokeWidth="0.8" />
+    <path
+        android:pathData="M17 20.5 L20 22 M18 21 L21 22.5"
+        android:strokeColor="#FFFFD54F"
+        android:strokeWidth="0.8" />
+</vector>

@@ -29,7 +29,6 @@ class MainRecyclerAdapter(
         private const val VIEW_TYPE_FOOTER = 2
     }
 
-    private val doubleColumnDisplay = MmkvManager.decodeSettingsBool(AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
     private var data: MutableList<ServersCache> = mutableListOf()
 
     @SuppressLint("NotifyDataSetChanged")
@@ -58,7 +57,7 @@ class MainRecyclerAdapter(
             holder.itemMainBinding.tvStatistics.text = getAddress(profile)
             holder.itemMainBinding.tvType.text = profile.configType.name
 
-            //TestResult
+            // TestResult
             val aff = MmkvManager.decodeServerAffiliationInfo(guid)
             holder.itemMainBinding.tvTestResult.text = aff?.getTestDelayString().orEmpty()
             if ((aff?.testDelayMillis ?: 0L) < 0L) {
@@ -67,7 +66,44 @@ class MainRecyclerAdapter(
                 holder.itemMainBinding.tvTestResult.setTextColor(ContextCompat.getColor(context, R.color.colorPing))
             }
 
-            //layoutIndicator
+            // apply style sizes
+            val prefSize = MmkvManager.decodeSettingsString("pref_server_size", "standard")
+            when (prefSize) {
+                "min" -> {
+                    holder.itemMainBinding.tvName.textSize = 10f
+                    holder.itemMainBinding.tvStatistics.textSize = 8f
+                    holder.itemMainBinding.tvType.textSize = 8f
+                    holder.itemMainBinding.tvTestResult.textSize = 8f
+                    holder.itemMainBinding.tvSubscription.textSize = 8f
+                }
+                "shrink" -> {
+                    holder.itemMainBinding.tvName.textSize = 12f
+                    holder.itemMainBinding.tvStatistics.textSize = 10f
+                    holder.itemMainBinding.tvType.textSize = 10f
+                    holder.itemMainBinding.tvTestResult.textSize = 10f
+                    holder.itemMainBinding.tvSubscription.textSize = 10f
+                }
+                else -> {
+                    holder.itemMainBinding.tvName.textSize = 14f
+                    holder.itemMainBinding.tvStatistics.textSize = 11f
+                    holder.itemMainBinding.tvType.textSize = 11f
+                    holder.itemMainBinding.tvTestResult.textSize = 11f
+                    holder.itemMainBinding.tvSubscription.textSize = 11f
+                }
+            }
+
+            // apply layout padding
+            val prefLayout = MmkvManager.decodeSettingsString("pref_server_layout", "standard")
+            val paddingDp = when (prefLayout) {
+                "loose" -> 20
+                "tight" -> 4
+                else -> 10
+            }
+            val density = context.resources.displayMetrics.density
+            val paddingPx = (paddingDp * density).toInt()
+            holder.itemMainBinding.infoContainer.setPadding(paddingPx, paddingPx, paddingPx, paddingPx)
+
+            // layoutIndicator
             if (guid == MmkvManager.getSelectServer()) {
                 holder.itemMainBinding.infoContainer.setBackgroundResource(R.drawable.bg_proxy_selected)
             } else {
@@ -80,6 +116,7 @@ class MainRecyclerAdapter(
             holder.itemMainBinding.layoutSubscription.visibility = if (subRemarks.isEmpty()) View.GONE else View.VISIBLE
 
             //layout
+            val doubleColumnDisplay = MmkvManager.decodeSettingsBool(AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
             if (doubleColumnDisplay) {
                 holder.itemMainBinding.layoutShare.visibility = View.GONE
                 holder.itemMainBinding.layoutEdit.visibility = View.GONE

@@ -1,5 +1,7 @@
 package com.v2ray.ang.ui
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.net.Uri
@@ -35,6 +37,7 @@ import com.v2ray.ang.handler.SettingsManager
 import com.v2ray.ang.handler.V2RayServiceManager
 import com.v2ray.ang.util.Utils
 import com.v2ray.ang.viewmodel.MainViewModel
+import com.topjohnwu.superuser.Shell
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -77,6 +80,7 @@ class MainActivity : HelperBaseActivity() {
         binding.viewPager.adapter = groupPagerAdapter
         binding.viewPager.isUserInputEnabled = true
 
+        binding.bottomNav.itemIconTintList = null
         binding.bottomNav.selectedItemId = R.id.nav_proxies
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -140,12 +144,33 @@ class MainActivity : HelperBaseActivity() {
     private fun getIpAddress(type: String): String {
         try {
             val interfaces = java.net.NetworkInterface.getNetworkInterfaces()
-            for (intf in java.util.Collections.list(interfaces)) {
-                val match = if (type == "tun") intf.name.contains("tun") else (!intf.name.contains("tun") && (intf.name.contains("wlan") || intf.name.contains("rmnet") || intf.name.contains("eth")))
+            val list = java.util.Collections.list(interfaces)
+            // First pass: try with standard filters (e.g. wlan, rmnet, eth)
+            for (intf in list) {
+                val nameLower = intf.name.lowercase()
+                val match = if (type == "tun") {
+                    nameLower.contains("tun")
+                } else {
+                    !nameLower.contains("tun") && (nameLower.contains("wlan") || nameLower.contains("rmnet") || nameLower.contains("eth") || nameLower.contains("ccmni") || nameLower.contains("pdp"))
+                }
                 if (match) {
                     for (addr in java.util.Collections.list(intf.inetAddresses)) {
                         if (!addr.isLoopbackAddress && addr is java.net.Inet4Address) {
                             return addr.hostAddress ?: ""
+                        }
+                    }
+                }
+            }
+
+            // Second pass for "net": if no specific mobile/wifi name matched, look for any non-tunnel local IP
+            if (type == "net") {
+                for (intf in list) {
+                    val nameLower = intf.name.lowercase()
+                    if (!nameLower.contains("tun") && !nameLower.contains("lo") && !nameLower.contains("p2p") && !nameLower.contains("tap")) {
+                        for (addr in java.util.Collections.list(intf.inetAddresses)) {
+                            if (!addr.isLoopbackAddress && addr is java.net.Inet4Address) {
+                                return addr.hostAddress ?: ""
+                            }
                         }
                     }
                 }
@@ -156,36 +181,91 @@ class MainActivity : HelperBaseActivity() {
         return ""
     }
 
+    private var lastIpRefreshTime = 0L
+    private var isRefreshingIps = false
+
+    private fun refreshIpAddresses(forceFetchPublic: Boolean = false) {
+        if (isRefreshingIps) return
+        val currentTime = System.currentTimeMillis()
+        val shouldFetchPublic = forceFetchPublic || (currentTime - lastIpRefreshTime) > 10000L
+
+        isRefreshingIps = true
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                // Read local properties safely on Dispatchers.IO
+                val providerIp = getIpAddress("net")
+                val tunIp = getIpAddress("tun")
+
+                var publicIp = ""
+                if (shouldFetchPublic) {
+                    val providers = listOf(
+                        "https://api.ipify.org",
+                        "https://ipinfo.io/ip",
+                        "https://icanhazip.com",
+                        "https://ifconfig.me/ip"
+                    )
+                    for (provider in providers) {
+                        try {
+                            val url = java.net.URL(provider)
+                            val connection = url.openConnection()
+                            connection.connectTimeout = 3000
+                            connection.readTimeout = 3000
+                            val ip = connection.getInputStream().bufferedReader().use { it.readText() }.trim()
+                            if (ip.isNotEmpty() && ip.contains(".")) {
+                                publicIp = ip
+                                lastIpRefreshTime = System.currentTimeMillis()
+                                break
+                            }
+                        } catch (e: Exception) {
+                            // Try next provider
+                        }
+                    }
+                }
+
+                withContext(Dispatchers.Main) {
+                    binding.tvProviderIp.text = if (providerIp.isNotEmpty()) providerIp else "-"
+                    if (shouldFetchPublic) {
+                        binding.tvNetworkIp.text = if (publicIp.isNotEmpty()) {
+                            publicIp
+                        } else if (tunIp.isNotEmpty()) {
+                            tunIp
+                        } else {
+                            "-"
+                        }
+                    } else {
+                        if (binding.tvNetworkIp.text == "-" || binding.tvNetworkIp.text.isEmpty()) {
+                            binding.tvNetworkIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+            } finally {
+                isRefreshingIps = false
+            }
+        }
+    }
+
     private fun setupViewModel() {
         mainViewModel.updateTestResultAction.observe(this) { setTestState(it) }
         mainViewModel.isRunning.observe(this) { isRunning ->
             applyRunningState(false, isRunning)
+            if (isRunning) {
+                lifecycleScope.launch {
+                    delay(2500)
+                    refreshIpAddresses(forceFetchPublic = true)
+                }
+            } else {
+                refreshIpAddresses(forceFetchPublic = true)
+            }
         }
         mainViewModel.updateTrafficAction.observe(this) { traffic ->
             binding.tvNetworkSpeed.text = "↑ ${traffic.txSpeed.toSpeedString()}   ↓ ${traffic.rxSpeed.toSpeedString()}"
             binding.tvTrafficUsage.text = "↑ ${traffic.totalTx.toTrafficString()}\n↓ ${traffic.totalRx.toTrafficString()}"
             binding.tvMemoryInfo.text = "${traffic.appMemory} MB"
             
-            val providerIp = getIpAddress("net")
-            binding.tvProviderIp.text = if (providerIp.isNotEmpty()) providerIp else "-"
-            val tunIp = getIpAddress("tun")
-            // Fetch public IP address
-            lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    val url = java.net.URL("https://api.ipify.org")
-                    val connection = url.openConnection()
-                    connection.connectTimeout = 5000
-                    connection.readTimeout = 5000
-                    val publicIp = connection.getInputStream().bufferedReader().use { it.readText() }
-                    withContext(Dispatchers.Main) {
-                        binding.tvNetworkIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        binding.tvNetworkIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
-                    }
-                }
-            }
+            // Periodically refresh IP addresses without spamming HTTP calls (throttle built-in)
+            refreshIpAddresses(forceFetchPublic = false)
         }
         mainViewModel.startListenBroadcast()
         mainViewModel.initAssets(assets)
@@ -203,10 +283,12 @@ class MainActivity : HelperBaseActivity() {
             }
         }.also { it.attach() }
 
-        val targetIndex = groups.indexOfFirst { it.id == mainViewModel.subscriptionId }.takeIf { it >= 0 } ?: (groups.size - 1)
-        binding.viewPager.setCurrentItem(targetIndex, false)
+        val targetIndex = groups.indexOfFirst { it.id == mainViewModel.subscriptionId }.takeIf { it >= 0 } ?: maxOf(0, groups.size - 1)
+        if (groups.isNotEmpty()) {
+            binding.viewPager.setCurrentItem(targetIndex, false)
+        }
 
-        binding.tabGroup.isVisible = groups.size > 1
+        binding.tabGroup.isVisible = groups.isNotEmpty()
     }
 
     private fun handleFabAction() {
@@ -321,28 +403,9 @@ class MainActivity : HelperBaseActivity() {
             val memInfo = android.os.Debug.MemoryInfo()
             android.os.Debug.getMemoryInfo(memInfo)
             binding.tvMemoryInfo.text = "${memInfo.totalPss / 1024L} MB"
-            
-            val providerIp = getIpAddress("net")
-            binding.tvProviderIp.text = if (providerIp.isNotEmpty()) providerIp else "-"
-            val tunIp = getIpAddress("tun")
-            // Fetch public IP address
-            lifecycleScope.launch(Dispatchers.IO) {
-                try {
-                    val url = java.net.URL("https://api.ipify.org")
-                    val connection = url.openConnection()
-                    connection.connectTimeout = 5000
-                    connection.readTimeout = 5000
-                    val publicIp = connection.getInputStream().bufferedReader().use { it.readText() }
-                    withContext(Dispatchers.Main) {
-                        binding.tvNetworkIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
-                    }
-                } catch (e: Exception) {
-                    withContext(Dispatchers.Main) {
-                        binding.tvNetworkIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
-                    }
-                }
-            }
         }
+        
+        refreshIpAddresses(forceFetchPublic = true)
 
         val routingMode = com.v2ray.ang.handler.MmkvManager.decodeSettingsString(com.v2ray.ang.AppConfig.PREF_ROUTING_DOMAIN_STRATEGY) ?: "IPIfNonMatch"
         binding.tvRoutingMode.text = routingMode
@@ -387,6 +450,25 @@ class MainActivity : HelperBaseActivity() {
         val isGrid = com.v2ray.ang.handler.MmkvManager.decodeSettingsBool(com.v2ray.ang.AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
         menu.findItem(R.id.style_grid)?.isChecked = isGrid
         menu.findItem(R.id.style_list)?.isChecked = !isGrid
+
+        when (com.v2ray.ang.handler.MmkvManager.decodeSettingsString("pref_server_sort", "default")) {
+            "delay" -> menu.findItem(R.id.sort_delay)?.isChecked = true
+            "name" -> menu.findItem(R.id.sort_name)?.isChecked = true
+            else -> menu.findItem(R.id.sort_default)?.isChecked = true
+        }
+
+        when (com.v2ray.ang.handler.MmkvManager.decodeSettingsString("pref_server_layout", "standard")) {
+            "loose" -> menu.findItem(R.id.layout_loose)?.isChecked = true
+            "tight" -> menu.findItem(R.id.layout_tight)?.isChecked = true
+            else -> menu.findItem(R.id.layout_standard)?.isChecked = true
+        }
+
+        when (com.v2ray.ang.handler.MmkvManager.decodeSettingsString("pref_server_size", "standard")) {
+            "shrink" -> menu.findItem(R.id.size_shrink)?.isChecked = true
+            "min" -> menu.findItem(R.id.size_min)?.isChecked = true
+            else -> menu.findItem(R.id.size_standard)?.isChecked = true
+        }
+
         return true
     }
 
@@ -461,6 +543,65 @@ class MainActivity : HelperBaseActivity() {
             true
         }
 
+        R.id.delete_invalid -> {
+            mainViewModel.removeInvalidServer()
+            true
+        }
+
+        R.id.delete_all -> {
+            AlertDialog.Builder(this)
+                .setMessage(R.string.del_all_config_comfirm)
+                .setPositiveButton(android.R.string.ok) { _, _ ->
+                    mainViewModel.removeAllServer()
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+            true
+        }
+
+        R.id.export_all -> {
+            val servers = mainViewModel.serversCache
+            if (servers.isNotEmpty()) {
+                val sb = StringBuilder()
+                for (server in servers) {
+                    sb.append(Utils.getURL(server)).append("\n")
+                }
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = ClipData.newPlainText("v2ray_configs", sb.toString())
+                clipboard.setPrimaryClip(clip)
+                toast(R.string.copied_to_clipboard)
+            }
+            true
+        }
+
+        R.id.hotspot_root -> {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if (Shell.getShell().isRoot) {
+                    val result = Shell.cmd(
+                        "iptables -t filter -F FORWARD",
+                        "iptables -t nat -F POSTROUTING",
+                        "iptables -t filter -I FORWARD -j ACCEPT",
+                        "iptables -t nat -I POSTROUTING -j MASQUERADE",
+                        "ip rule add pref 1 from all lookup main",
+                        "ip rule add pref 1 from all lookup default",
+                        "ip route add default dev tun0"
+                    ).exec()
+                    withContext(Dispatchers.Main) {
+                        if (result.isSuccess) {
+                            toast("Hotspot Root Activated Successfully!")
+                        } else {
+                            toast("Failed to activate Hotspot Root")
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        toast("Root access is required!")
+                    }
+                }
+            }
+            true
+        }
+
         R.id.ping_all -> {
             toast(getString(R.string.connection_test_testing_count, mainViewModel.serversCache.count()))
             mainViewModel.testAllTcping()
@@ -481,23 +622,28 @@ class MainActivity : HelperBaseActivity() {
         R.id.style_grid -> {
             item.isChecked = true
             com.v2ray.ang.handler.MmkvManager.encodeSettings(com.v2ray.ang.AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, true)
-            recreate()
-            true
-        }
-        
-        R.id.style_list -> {
-            item.isChecked = true
-            com.v2ray.ang.handler.MmkvManager.encodeSettings(com.v2ray.ang.AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
-            recreate()
+            mainViewModel.uiRefreshAction.value = true
             true
         }
 
-        R.id.sort_default, R.id.sort_delay, R.id.sort_name,
-        R.id.layout_loose, R.id.layout_standard, R.id.layout_tight,
-        R.id.size_standard, R.id.size_shrink, R.id.size_min -> {
+        R.id.style_list -> {
             item.isChecked = true
+            com.v2ray.ang.handler.MmkvManager.encodeSettings(com.v2ray.ang.AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
+            mainViewModel.uiRefreshAction.value = true
             true
         }
+
+        R.id.sort_default -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_sort", "default"); mainViewModel.reloadServerList(); true }
+        R.id.sort_delay -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_sort", "delay"); mainViewModel.reloadServerList(); true }
+        R.id.sort_name -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_sort", "name"); mainViewModel.reloadServerList(); true }
+
+        R.id.layout_loose -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_layout", "loose"); mainViewModel.reloadServerList(); true }
+        R.id.layout_standard -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_layout", "standard"); mainViewModel.reloadServerList(); true }
+        R.id.layout_tight -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_layout", "tight"); mainViewModel.reloadServerList(); true }
+
+        R.id.size_standard -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_size", "standard"); mainViewModel.reloadServerList(); true }
+        R.id.size_shrink -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_size", "shrink"); mainViewModel.reloadServerList(); true }
+        R.id.size_min -> { item.isChecked = true; com.v2ray.ang.handler.MmkvManager.encodeSettings("pref_server_size", "min"); mainViewModel.reloadServerList(); true }
 
         else -> super.onOptionsItemSelected(item)
     }

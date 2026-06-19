@@ -1,21 +1,37 @@
-# Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# Project specific ProGuard rules
 
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# Keep all DTO / models used for Gson serialization & MMKV storage
+-keep class com.v2ray.ang.dto.** { *; }
+-keep class com.v2ray.ang.enums.** { *; }
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# Keep AppConfig and other constant key structures
+-keep class com.v2ray.ang.AppConfig { *; }
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# Gson specific rules
+-keepattributes Signature, *Annotation*, EnclosingMethod, InnerClasses
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+-keep class com.google.gson.** { *; }
+
+# Native and JNI rules
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# MMKV rules
+-keep class com.tencent.mmkv.** { *; }
+-keepclassmembers class com.tencent.mmkv.** { *; }
+
+# Libsu rules (since we might use root shell)
+-keep class com.topjohnwu.libsu.** { *; }
+
+# Kotlin coroutines and reflection
+-keep class kotlin.coroutines.** { *; }
+-keep class kotlinx.coroutines.** { *; }
+
+# Support and AndroidX components
+-keep class androidx.preference.** { *; }
+
+# Retain Line numbers and source files for easy stack trace deobfuscation
+-keepattributes SourceFile,LineNumberTable

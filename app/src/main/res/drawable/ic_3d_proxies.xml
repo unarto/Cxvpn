@@ -1,0 +1,74 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Ambient Shadow -->
+    <path
+        android:pathData="M12,22 C16,22 20,20 20,18 C20,16 16,16 12,16 C8,16 4,16 4,18 C4,20 8,22 12,22 Z"
+        android:fillColor="#15000000" />
+
+    <!-- Central Node Core (3D Spherical Globe) -->
+    <!-- Base Node Sphere -->
+    <path
+        android:pathData="M12,12m-6,0a6,6 0 1,1 12,0a6,6 0 1,1 -12,0"
+        android:fillColor="#FF2196F3" />
+    
+    <!-- 3D Shading Layer (Deep Shadow) -->
+    <path
+        android:pathData="M12,12m-6,0a6,6 0 1,1 12,0a6,6 0 1,1 -12,0"
+        android:fillColor="#8000153B" />
+
+    <!-- Front Glow Segment -->
+    <path
+        android:pathData="M12,12m-4.5,0a4.5,4.5 0 1,1 9,0a4.5,4.5 0 1,1 -9,0"
+        android:fillColor="#4D00FFFF" />
+
+    <!-- Grid Lines (Latitude/Longitude) for 3D globe visualization -->
+    <path
+        android:pathData="M12,6 C13.5,8 13.5,16 12,18"
+        android:strokeColor="#80FFFFFF"
+        android:strokeWidth="0.8" />
+    <path
+        android:pathData="M12,6 C10.5,8 10.5,16 12,18"
+        android:strokeColor="#80FFFFFF"
+        android:strokeWidth="0.8" />
+    <path
+        android:pathData="M6.5,10 C10,11.5 14,11.5 17.5,10"
+        android:strokeColor="#80FFFFFF"
+        android:strokeWidth="0.8" />
+    <path
+        android:pathData="M6.5,14 C10,15.5 14,15.5 17.5,14"
+        android:strokeColor="#80FFFFFF"
+        android:strokeWidth="0.8" />
+
+    <!-- Outer 3D Glass Orbital Ring (Angled) -->
+    <!-- Back Side of Ring (Behind Globe) -->
+    <path
+        android:pathData="M2.5,13.5 C4.5,9.5 19.5,7.5 21.5,11.5"
+        android:strokeColor="#40E0F0FF"
+        android:strokeWidth="2.5" />
+
+    <!-- Front Side of Ring (In front of Globe, Glass Acrylic effect) -->
+    <path
+        android:pathData="M21.5,11.2 C19.5,15.2 4.5,17.2 2.5,13.2"
+        android:strokeColor="#E600FFFF"
+        android:strokeWidth="2.5" />
+    <path
+        android:pathData="M21.5,11.2 C19.5,15.2 4.5,17.2 2.5,13.2"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="0.8" />
+
+    <!-- Glowing Connection Nodes on the Ring -->
+    <path
+        android:pathData="M6,14.8m-1,0a1,1 0 1,1 2,0a1,1 0 1,1 -2,0"
+        android:fillColor="#FF2196F3"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="0.5" />
+    <path
+        android:pathData="M18,11.2m-1,0a1,1 0 1,1 2,0a1,1 0 1,1 -2,0"
+        android:fillColor="#FF00FFFF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="0.5" />
+</vector>

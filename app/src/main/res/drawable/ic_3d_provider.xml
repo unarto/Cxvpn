@@ -1,0 +1,76 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Bottom drop shadow -->
+    <path
+        android:pathData="M7 26 L16 30 L25 26 L16 22 Z"
+        android:fillColor="#15000000" />
+
+    <!-- Server Module 1 (Bottom Rack Slot) -->
+    <!-- Extruded Front Left Side -->
+    <path
+        android:pathData="M8 20 L16 24 L16 26 L8 22 Z"
+        android:fillColor="#FF0D47A1" />
+    <!-- Extruded Front Right Side -->
+    <path
+        android:pathData="M16 24 L24 20 L24 22 L16 26 Z"
+        android:fillColor="#FF0A357A" />
+    <!-- Top Platter Surface (Glass Layer) -->
+    <path
+        android:pathData="M8 20 L16 24 L24 20 L16 16 Z"
+        android:fillColor="#8000E5FF"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="0.8" />
+
+    <!-- Server Module 2 (Top Rack Slot) -->
+    <!-- Extruded Front Left Side -->
+    <path
+        android:pathData="M8 12 L16 16 L16 18 L8 14 Z"
+        android:fillColor="#FF1976D2" />
+    <!-- Extruded Front Right Side -->
+    <path
+        android:pathData="M16 16 L24 12 L24 14 L16 18 Z"
+        android:fillColor="#FF115293" />
+    <!-- Top Platter Surface (Glass Layer) -->
+    <path
+        android:pathData="M8 12 L16 16 L24 12 L16 8 Z"
+        android:fillColor="#B300E5FF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="0.8" />
+
+    <!-- Shiny Indicator LEDs on server panel Front-Left (Active Green/Cyan dots) -->
+    <path
+        android:pathData="M11 22.5 L12 23"
+        android:strokeColor="#FF00FF00"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M13 23.5 L14 24"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round" />
+
+    <path
+        android:pathData="M11 14.5 L12 15"
+        android:strokeColor="#FF00FF00"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round" />
+    <path
+        android:pathData="M13 15.5 L14 16"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round" />
+
+    <!-- Grid Ventlines (Isometric ventilation grill) -->
+    <path
+        android:pathData="M18 14 L21 12.5 M19 14.5 L22 13"
+        android:strokeColor="#40FFFFFF"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M18 22 L21 20.5 M19 22.5 L22 21"
+        android:strokeColor="#40FFFFFF"
+        android:strokeWidth="1" />
+</vector>

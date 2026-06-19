@@ -28,6 +28,7 @@ class SettingsActivity : BaseActivity() {
         setContentViewWithToolbar(R.layout.activity_settings, showHomeAsUp = true, title = getString(R.string.title_settings))
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)
+        bottomNav.itemIconTintList = null
         bottomNav.selectedItemId = R.id.nav_tools
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {

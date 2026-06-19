@@ -4,10 +4,56 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Soft Rear Ambient Glow (Gives cybernetic depth) -->
     <path
-        android:fillColor="#00000000"
-        android:strokeColor="#00FFFF"
+        android:pathData="M 76 34 A 28 28 0 1 0 76 74"
+        android:strokeColor="#2200FFFF"
         android:strokeWidth="16"
-        android:strokeLineCap="round"
-        android:pathData="M 74 34 A 28 28 0 1 0 74 74" />
+        android:strokeLineCap="round" />
+
+    <!-- 3D Bevel Dark Under-Layer (Shadow depth) -->
+    <path
+        android:pathData="M 77 36 A 28 28 0 1 0 77 76"
+        android:strokeColor="#FF0D47A1"
+        android:strokeWidth="10"
+        android:strokeLineCap="round" />
+
+    <!-- Main High-Contrast Cyber-C Ribbon (Vibrant Cyan) -->
+    <path
+        android:pathData="M 75 34 A 28 28 0 1 0 75 74"
+        android:strokeColor="#FF00E5FF"
+        android:strokeWidth="8"
+        android:strokeLineCap="round" />
+
+    <!-- Inner Neon Purple Accent Ribbon (Gives dual-tone premium look) -->
+    <path
+        android:pathData="M 71 38 A 23 23 0 1 0 71 70"
+        android:strokeColor="#FFD500F9"
+        android:strokeWidth="3.5"
+        android:strokeLineCap="round" />
+
+    <!-- Glossy Specular Reflection Line (Glassmorphic effect) -->
+    <path
+        android:pathData="M 52 28 A 26 26 0 0 0 31 46"
+        android:strokeColor="#E6FFFFFF"
+        android:strokeWidth="1.2"
+        android:strokeLineCap="round" />
+
+    <!-- Top Cyber Beacon Halo (Glowing tip) -->
+    <path
+        android:pathData="M 75 34m -4.5 0a 4.5 4.5 0 1 1 9 0a 4.5 4.5 0 1 1 -9 0"
+        android:fillColor="#3300FFFF" />
+    <path
+        android:pathData="M 75 34m -2 0a 2 2 0 1 1 4 0a 2 2 0 1 1 -4 0"
+        android:fillColor="#FFFFFFFF" />
+
+    <!-- Bottom Cyber Beacon Halo (Glowing tip) -->
+    <path
+        android:pathData="M 75 74m -4.5 0a 4.5 4.5 0 1 1 9 0a 4.5 4.5 0 1 1 -9 0"
+        android:fillColor="#3300FFFF" />
+    <path
+        android:pathData="M 75 74m -2 0a 2 2 0 1 1 4 0a 2 2 0 1 1 -4 0"
+        android:fillColor="#FFFFFFFF" />
+
 </vector>

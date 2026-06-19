@@ -56,6 +56,7 @@ class SubSettingActivity : BaseActivity() {
         mItemTouchHelper = ItemTouchHelper(SimpleItemTouchHelperCallback(adapter))
         mItemTouchHelper?.attachToRecyclerView(binding.recyclerView)
         
+        binding.bottomNav.itemIconTintList = null
         binding.bottomNav.selectedItemId = R.id.nav_profiles
         binding.bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {

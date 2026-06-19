@@ -131,38 +131,45 @@
                         android:padding="16dp">
                         
                         <!-- Mock Dashboard Cards -->
-                        <androidx.cardview.widget.CardView
+                        <FrameLayout
                             android:layout_width="match_parent"
-                            android:layout_height="120dp"
-                            app:cardCornerRadius="16dp"
-                            app:cardBackgroundColor="@color/dashboard_card_bg"
-                            app:cardElevation="0dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_proxy_selected"
                             android:layout_marginBottom="16dp">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:gravity="center"
-                                android:orientation="vertical">
-                                <TextView
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingHorizontal="20dp">
+                                <ImageView
+                                    android:layout_width="48dp"
+                                    android:layout_height="48dp"
+                                    android:src="@drawable/ic_3d_speed"
+                                    android:layout_marginEnd="16dp" />
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Network Speed"
-                                    android:textColor="@color/dashboard_card_text"
-                                    android:layout_marginBottom="8dp"
-                                    app:drawableStartCompat="@drawable/ic_stat_name"
-                                    android:drawablePadding="8dp"
-                                    app:drawableTint="@color/dashboard_card_text"
-                                    android:textStyle="bold" />
-                                <TextView
-                                    android:id="@+id/tv_network_speed"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="↑ 0 B/s   ↓ 0 B/s"
-                                    android:textColor="@color/dashboard_card_text"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:orientation="vertical">
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="Network Speed"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:layout_marginBottom="4dp"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+                                    <TextView
+                                        android:id="@+id/tv_network_speed"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="↑ 0 B/s   ↓ 0 B/s"
+                                        android:textColor="@color/dashboard_card_text"
+                                        android:textSize="18sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
                             </LinearLayout>
-                        </androidx.cardview.widget.CardView>
+                        </FrameLayout>
                         
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -175,12 +182,11 @@
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
-                                <androidx.cardview.widget.CardView
+                                <FrameLayout
                                     android:id="@+id/btn_routing_mode"
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
-                                    app:cardCornerRadius="16dp"
-                                    android:background="@drawable/bg_glass_card"
+                                    android:background="@drawable/bg_proxy_selected"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp"
                                     android:clickable="true"
@@ -189,16 +195,21 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <ImageView
+                                            android:layout_width="48dp"
+                                            android:layout_height="48dp"
+                                            android:src="@drawable/ic_3d_routing"
+                                            android:layout_marginBottom="8dp" />
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Routing Mode"
                                             android:textColor="@color/dashboard_card_text"
-                                            android:layout_marginBottom="8dp"
-                                            app:drawableStartCompat="@drawable/ic_stat_name"
-                                            android:drawablePadding="8dp"
-                                            app:drawableTint="@color/dashboard_card_text"
+                                            android:layout_marginBottom="2dp"
+                                            android:textSize="13sp"
+                                            android:alpha="0.8"
                                             android:textStyle="bold" />
                                         <TextView
                                             android:id="@+id/tv_routing_mode"
@@ -206,72 +217,92 @@
                                             android:layout_height="wrap_content"
                                             android:text="Global"
                                             android:textColor="@color/dashboard_card_text"
-                                            android:textSize="18sp"
+                                            android:textSize="16sp"
                                             android:textStyle="bold" />
                                     </LinearLayout>
-                                </androidx.cardview.widget.CardView>
+                                </FrameLayout>
                                 
-                                <androidx.cardview.widget.CardView
+                                <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="@color/dashboard_card_bg"
-                                    app:cardElevation="0dp"
+                                    android:background="@drawable/bg_proxy_selected"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical">
-                                        <TextView
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="12dp">
+                                        <ImageView
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:src="@drawable/ic_3d_provider"
+                                            android:layout_marginEnd="8dp" />
+                                        <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Provider IP"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:layout_marginBottom="4dp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tv_provider_ip"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:textSize="14sp"
-                                            android:textStyle="bold" />
+                                            android:orientation="vertical">
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Provider IP"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="12sp"
+                                                android:alpha="0.8"
+                                                android:textStyle="bold" />
+                                            <TextView
+                                                android:id="@+id/tv_provider_ip"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="-"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
                                     </LinearLayout>
-                                </androidx.cardview.widget.CardView>
+                                </FrameLayout>
                                 
-                                <androidx.cardview.widget.CardView
+                                <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="@color/dashboard_card_bg"
-                                    app:cardElevation="0dp"
+                                    android:background="@drawable/bg_proxy_selected"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical">
-                                        <TextView
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="12dp">
+                                        <ImageView
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:src="@drawable/ic_3d_memory"
+                                            android:layout_marginEnd="8dp" />
+                                        <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Memory Info"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:layout_marginBottom="4dp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tv_memory_info"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:textSize="14sp"
-                                            android:textStyle="bold" />
+                                            android:orientation="vertical">
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Memory Info"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="12sp"
+                                                android:alpha="0.8"
+                                                android:textStyle="bold" />
+                                            <TextView
+                                                android:id="@+id/tv_memory_info"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="-"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
                                     </LinearLayout>
-                                </androidx.cardview.widget.CardView>
+                                </FrameLayout>
                             </LinearLayout>
                             <!-- Right Column -->
                             <LinearLayout
@@ -279,28 +310,31 @@
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
-                                <androidx.cardview.widget.CardView
+                                <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
-                                    app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="@color/dashboard_card_bg"
-                                    app:cardElevation="0dp"
+                                    android:background="@drawable/bg_proxy_selected"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:gravity="center"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        android:padding="12dp">
+                                        <ImageView
+                                            android:layout_width="48dp"
+                                            android:layout_height="48dp"
+                                            android:src="@drawable/ic_3d_traffic"
+                                            android:layout_marginBottom="8dp" />
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Traffic Usage"
                                             android:textColor="@color/dashboard_card_text"
-                                            android:layout_marginBottom="8dp"
-                                            app:drawableStartCompat="@drawable/ic_stat_name"
-                                            android:drawablePadding="8dp"
-                                            app:drawableTint="@color/dashboard_card_text"
+                                            android:layout_marginBottom="2dp"
+                                            android:textSize="13sp"
+                                            android:alpha="0.8"
                                             android:textStyle="bold" />
                                         <TextView
                                             android:id="@+id/tv_traffic_usage"
@@ -308,50 +342,58 @@
                                             android:layout_height="wrap_content"
                                             android:text="↑ 0 B\n↓ 0 B"
                                             android:textColor="@color/dashboard_card_text"
-                                            android:textSize="16sp"
+                                            android:textSize="15sp"
                                             android:gravity="center"
                                             android:textStyle="bold" />
                                     </LinearLayout>
-                                </androidx.cardview.widget.CardView>
+                                </FrameLayout>
                                 
-                                <androidx.cardview.widget.CardView
+                                <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="@color/dashboard_card_bg"
-                                    app:cardElevation="0dp"
+                                    android:background="@drawable/bg_proxy_selected"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:orientation="vertical">
-                                        <TextView
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="12dp">
+                                        <ImageView
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:src="@drawable/ic_3d_network"
+                                            android:layout_marginEnd="8dp" />
+                                        <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:text="Network IP"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:layout_marginBottom="4dp"
-                                            android:textStyle="bold" />
-                                        <TextView
-                                            android:id="@+id/tv_network_ip"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="-"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:textSize="14sp"
-                                            android:textStyle="bold" />
+                                            android:orientation="vertical">
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Network IP"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="12sp"
+                                                android:alpha="0.8"
+                                                android:textStyle="bold" />
+                                            <TextView
+                                                android:id="@+id/tv_network_ip"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="-"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
                                     </LinearLayout>
-                                </androidx.cardview.widget.CardView>
+                                </FrameLayout>
                                 
-                                <androidx.cardview.widget.CardView
+                                <FrameLayout
                                     android:id="@+id/btn_vpn_mode"
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="@color/dashboard_card_bg"
-                                    app:cardElevation="0dp"
+                                    android:background="@drawable/bg_proxy_selected"
                                     android:focusable="true"
                                     android:clickable="true"
                                     android:layout_marginStart="8dp"
@@ -359,17 +401,38 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:gravity="center"
-                                        android:paddingHorizontal="16dp"
-                                        android:orientation="vertical">
-                                        <TextView
-                                            android:id="@+id/tv_vpn_mode"
-                                            android:layout_width="wrap_content"
+                                        android:gravity="center_vertical"
+                                        android:orientation="horizontal"
+                                        android:paddingHorizontal="12dp">
+                                        <ImageView
+                                            android:layout_width="32dp"
+                                            android:layout_height="32dp"
+                                            android:src="@drawable/ic_3d_vpn"
+                                            android:layout_marginEnd="8dp" />
+                                        <LinearLayout
+                                            android:layout_width="0dp"
                                             android:layout_height="wrap_content"
-                                            android:text="Mode VPN"
-                                            android:textColor="@color/dashboard_card_text"
-                                            android:layout_marginBottom="4dp"
-                                            android:textStyle="bold" />
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+                                            <TextView
+                                                android:id="@+id/tv_vpn_mode"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Mode VPN"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="12sp"
+                                                android:alpha="0.8"
+                                                android:textStyle="bold" />
+                                            <TextView
+                                                android:id="@+id/tv_vpn_status"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Disabled"
+                                                android:textColor="@color/dashboard_card_text"
+                                                android:textSize="11sp"
+                                                android:visibility="gone"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
                                         <com.google.android.material.switchmaterial.SwitchMaterial
                                             android:id="@+id/switch_vpn_mode"
                                             android:layout_width="wrap_content"
@@ -377,7 +440,7 @@
                                             android:clickable="false"
                                             android:focusable="false" />
                                     </LinearLayout>
-                                </androidx.cardview.widget.CardView>
+                                </FrameLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -388,7 +451,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="@drawable/bg_proxy_selected"
+                    app:elevation="0dp"
+                    app:itemIconSize="28dp"
+                    app:itemActiveIndicatorStyle="@null"
+                    app:itemIconTint="@null"
+                    app:itemTextColor="@color/bottom_nav_text_color"
                     app:labelVisibilityMode="labeled"
+                    app:itemTextAppearanceActive="@style/BottomNavTextStyle"
+                    app:itemTextAppearanceInactive="@style/BottomNavTextStyle"
                     app:menu="@menu/bottom_nav_menu" />
                 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>

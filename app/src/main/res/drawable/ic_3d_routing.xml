@@ -1,0 +1,59 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Glowing Base Connection Paths -->
+    <path
+        android:pathData="M16 6 L6 13 L16 20 M16 20 L26 13 L16 6 Z"
+        android:strokeColor="#3300FFFF"
+        android:strokeWidth="1.5" />
+
+    <!-- Isometric Central Pillar -->
+    <path
+        android:pathData="M16 6 L16 26"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="2" />
+
+    <!-- 3D Node 1 (Top Node - Global / Root) -->
+    <!-- Shadow -->
+    <path
+        android:pathData="M16 7.5 C16.8 7.5 17.5 6.8 17.5 6 C17.5 5.2 16.8 4.5 16 4.5 C15.2 4.5 14.5 5.2 14.5 6 C14.5 6.8 15.2 7.5 16 7.5 Z"
+        android:fillColor="#80FFFFFF" />
+    <path
+        android:pathData="M16 7 C16.5 7 17 6.5 17 6 C17 5.5 16.5 5 16 5 C15.5 5 15 5.5 15 6 C15 6.5 15.5 7 16 7 Z"
+        android:fillColor="#FF00FFFF" />
+
+    <!-- 3D Node 2 (Left Node) -->
+    <path
+        android:pathData="M6 14.5 C6.8 14.5 7.5 13.8 7.5 13 C7.5 12.2 6.8 11.5 6 11.5 C5.2 11.5 4.5 12.2 4.5 13 C4.5 13.8 5.2 14.5 6 14.5 Z"
+        android:fillColor="#8000FFFF" />
+    <path
+        android:pathData="M6 14 C6.5 14 7 13.5 7 13 C7 12.5 6.5 12 6 12 C5.5 12 5 12.5 5 13 C5 13.5 5.5 14 6 14 Z"
+        android:fillColor="#FFEEFFFA" />
+
+    <!-- 3D Node 3 (Right Node) -->
+    <path
+        android:pathData="M26 14.5 C26.8 14.5 27.5 13.8 27.5 13 C27.5 12.2 26.8 11.5 26 11.5 C25.2 11.5 24.5 12.2 24.5 13 C24.5 13.8 25.2 14.5 26 14.5 Z"
+        android:fillColor="#8000FFFF" />
+    <path
+        android:pathData="M26 14 C26.5 14 27 13.5 27 13 C27 12.5 26.5 12 26 12 C25.5 12 25 12.5 25 13 C25 13.5 25.5 14 26 14 Z"
+        android:fillColor="#FFEEFFFA" />
+
+    <!-- 3D Node 4 (Bottom Node - Terminal hub) -->
+    <path
+        android:pathData="M16 27.5 C16.8 27.5 17.5 26.8 17.5 26 C17.5 25.2 16.8 24.5 16 24.5 C15.2 24.5 14.5 25.2 14.5 26 C14.5 26.8 15.2 27.5 16 27.5 Z"
+        android:fillColor="#40D500F9" />
+    <path
+        android:pathData="M16 27 Q18 20 26 13"
+        android:strokeColor="#80FFFFFF"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M16 27 Q14 20 6 13"
+        android:strokeColor="#80FFFFFF"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M16 26.5m-2 0a2 2 0 1 1 4 0a2 2 0 1 1 -4 0"
+        android:fillColor="#FF00FFFF" />
+</vector>

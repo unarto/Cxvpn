@@ -1,10 +1,7 @@
 name: Build APk baru
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
+  workflow_dispatch: # Sah! Cuma jalan kalau diklik manual dari web GitHub
 
 jobs:
   build:

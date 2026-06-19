@@ -76,6 +76,12 @@ class GroupServerFragment : BaseFragment<FragmentGroupServerBinding>() {
             adapter.setData(mainViewModel.serversCache, index)
         }
 
+        mainViewModel.uiRefreshAction.observe(viewLifecycleOwner) {
+            val isGrid = MmkvManager.decodeSettingsBool(AppConfig.PREF_DOUBLE_COLUMN_DISPLAY, false)
+            binding.recyclerView.layoutManager = GridLayoutManager(requireContext(), if (isGrid) 2 else 1)
+            adapter.setData(mainViewModel.serversCache) // notify data set changed to redraw styles
+        }
+
         // Log.d(TAG, "GroupServerFragment onViewCreated: subId=$subId")
     }
 

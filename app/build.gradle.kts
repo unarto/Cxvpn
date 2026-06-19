@@ -17,6 +17,7 @@ android {
         multiDexEnabled = true
 
         val abiFilterList = (properties["ABI_FILTERS"] as? String)?.split(';')
+        resourceConfigurations.addAll(listOf("en", "id"))
         splits {
             abi {
                 isEnable = true
@@ -52,7 +53,8 @@ android {
             signingConfig = signingConfigs.getByName("debugConfig")
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -124,6 +126,9 @@ dependencies {
     // Language and Processing Libraries
     implementation(libs.language.base)
     implementation(libs.language.json)
+    
+    // Root library
+    implementation(libs.libsu.core)
 
     // Intent and Utility Libraries
     implementation(libs.quickie.foss)

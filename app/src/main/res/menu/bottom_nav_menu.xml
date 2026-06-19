@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_dashboard"
-        android:icon="@drawable/ic_dashboard_24"
+        android:icon="@drawable/ic_3d_dashboard"
         android:title="Dashboard" />
     <item
         android:id="@+id/nav_proxies"
-        android:icon="@drawable/ic_proxies_24"
+        android:icon="@drawable/ic_3d_proxies"
         android:title="Proxies" />
     <item
         android:id="@+id/nav_profiles"
-        android:icon="@drawable/ic_folder_24"
+        android:icon="@drawable/ic_3d_profiles"
         android:title="Profiles" />
     <item
         android:id="@+id/nav_tools"
-        android:icon="@drawable/ic_settings_24dp"
+        android:icon="@drawable/ic_3d_tools"
         android:title="Tools" />
 </menu>

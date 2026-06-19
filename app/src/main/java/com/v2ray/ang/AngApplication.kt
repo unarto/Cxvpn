@@ -7,6 +7,7 @@ import androidx.work.WorkManager
 import com.tencent.mmkv.MMKV
 import com.v2ray.ang.AppConfig.ANG_PACKAGE
 import com.v2ray.ang.handler.SettingsManager
+import com.topjohnwu.superuser.Shell
 
 class AngApplication : MultiDexApplication() {
     companion object {
@@ -31,6 +32,8 @@ class AngApplication : MultiDexApplication() {
      */
     override fun onCreate() {
         super.onCreate()
+
+        Shell.setDefaultBuilder(Shell.Builder.create().setFlags(Shell.FLAG_REDIRECT_STDERR).setTimeout(10))
 
         MMKV.initialize(this)
 

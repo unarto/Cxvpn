@@ -1,0 +1,58 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="32dp"
+    android:height="32dp"
+    android:viewportWidth="32"
+    android:viewportHeight="32">
+
+    <!-- Ambient Glow behind dial -->
+    <path
+        android:pathData="M16 4 A12 12 0 0 1 28 16 A12 12 0 0 1 16 28 A12 12 0 0 1 4 16 A12 12 0 0 1 16 4 Z"
+        android:fillColor="#1A00FFFF" />
+
+    <!-- 3D Dial Rim (Inner dark ring) -->
+    <path
+        android:pathData="M16 6 A10 10 0 0 0 6 16 A10 10 0 0 0 16 26 A10 10 0 0 0 26 16 A10 10 0 0 0 16 6 Z"
+        android:fillColor="#FF001221"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1.5" />
+
+    <!-- Speed Arc - Dynamic Gauge Arc (Cyan glass highlight) -->
+    <path
+        android:pathData="M7.5 21.5 A8.5 8.5 0 1 1 24.5 21.5"
+        android:strokeColor="#E600FFFF"
+        android:strokeWidth="3"
+        android:strokeLineCap="round" />
+
+    <!-- Inner Tickmarks -->
+    <path
+        android:pathData="M9 16 L11 16"
+        android:strokeColor="#8000FFFF"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M21 16 L23 16"
+        android:strokeColor="#8000FFFF"
+        android:strokeWidth="1" />
+    <path
+        android:pathData="M16 9 L16 11"
+        android:strokeColor="#8000FFFF"
+        android:strokeWidth="1" />
+
+    <!-- 3D Gauge Pointer Core (Glow) -->
+    <path
+        android:pathData="M16 16m-3 0a3 3 0 1 1 6 0a3 3 0 1 1 -6 0"
+        android:fillColor="#FFD500F9" />
+
+    <!-- 3D Needle Pointer (Isometric / Angled) -->
+    <path
+        android:pathData="M15 16 L22 10 L17 17 Z"
+        android:fillColor="#FFFFFF" />
+    <path
+        android:pathData="M15 16 L17 17 L16 18 Z"
+        android:fillColor="#FF00FFFF" />
+
+    <!-- Frosted Glass Lens Overlay (reflection shine) -->
+    <path
+        android:pathData="M6.5 14 C10 11 22 11 25.5 14"
+        android:strokeColor="#E6FFFFFF"
+        android:strokeWidth="1" />
+</vector>

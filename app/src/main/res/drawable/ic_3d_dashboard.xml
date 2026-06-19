@@ -1,0 +1,50 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Bottom Shadow -->
+    <path
+        android:pathData="M3,16 L12,20 L21,16 L12,12 Z"
+        android:fillColor="#1F000000" />
+
+    <!-- 3D Base Slab - Bottom Sides -->
+    <path
+        android:pathData="M4,13 L12,17 L12,20 L4,16 Z"
+        android:fillColor="#FF0288D1" />
+    <path
+        android:pathData="M12,17 L20,13 L20,16 L12,20 Z"
+        android:fillColor="#FF01579B" />
+
+    <!-- 3D Base Slab - Top Surface (Glossy Cyan Glass) -->
+    <path
+        android:pathData="M4,13 L12,17 L20,13 L12,9 Z"
+        android:fillColor="#3300FFFF"
+        android:strokeColor="#FF00FFFF"
+        android:strokeWidth="1" />
+
+    <!-- Central Floating Glass Prism (Main 3D Element) -->
+    <!-- Left Face -->
+    <path
+        android:pathData="M8,7 L12,9 L12,14 L8,12 Z"
+        android:fillColor="#8000E5FF" />
+    <!-- Right Face -->
+    <path
+        android:pathData="M12,9 L16,7 L16,12 L12,14 Z"
+        android:fillColor="#80D500F9" />
+    <!-- Top Glass Reflection -->
+    <path
+        android:pathData="M8,7 L12,9 L16,7 L12,5 Z"
+        android:fillColor="#E0FFFFFF"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="0.5" />
+
+    <!-- Miniature glowing accent dots -->
+    <path
+        android:pathData="M6,12 L7,12.5 L6.5,13 L5.5,12.5 Z"
+        android:fillColor="#FF00FF00" />
+    <path
+        android:pathData="M17.5,12 L18.5,11.5 L18,11 L17,11.5 Z"
+        android:fillColor="#FFFFFF00" />
+</vector>

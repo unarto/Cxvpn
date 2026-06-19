@@ -42,7 +42,11 @@
     <string name="menu_item_import_config_manually_hysteriaudp">Add [HysteriaUdp]</string>
     <string name="del_config_comfirm">Confirm delete ?</string>
     <string name="del_invalid_config_comfirm">Please test before deleting! Confirm delete ?</string>
-    <string name="server_lab_remarks">remarks</string>
+    <string name="menu_delete_invalid">Delete Invalid Config</string>
+    <string name="menu_delete_all">Delete All Config</string>
+    <string name="menu_export_all">Export All Config</string>
+    <string name="del_all_config_comfirm">Confirm delete all configs?</string>
+    <string name="copied_to_clipboard">Copied all configs to clipboard</string>
     <string name="server_lab_address">address</string>
     <string name="server_lab_port">port</string>
     <string name="server_lab_id">id</string>
@@ -293,7 +297,7 @@
     <string name="title_user_asset_setting">Asset files</string>
     <string name="title_sort_by_test_results">Sorting by test results</string>
     <string name="title_filter_config">Filter config</string>
-    <string name="filter_config_all">All</string>
+    <string name="filter_config_all">Default</string>
     <string name="title_del_duplicate_config_count">Delete %d duplicate configs</string>
     <string name="title_del_config_count">Delete %d configs</string>
     <string name="title_import_config_count">Import %d configs</string>
