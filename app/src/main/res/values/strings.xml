@@ -122,7 +122,7 @@
     <string name="server_lab_xhttp_extra">XHTTP Extra raw JSON, format: { XHTTPObject }</string>
     <string name="server_lab_ech_config_list">EchConfigList</string>
     <string name="server_lab_ech_force_query">EchForceQuery</string>
-    <string name="server_lab_pinned_ca256">Certificate fingerprint (SHA-256)</string>
+    <string name="server_lab_pinned_ca256">Certificate fingerprint (SHA-256)</log>
 
     <!-- UserAssetActivity -->
     <string name="toast_asset_copy_failed">File copy failed, please use File Manager</string>
@@ -172,7 +172,6 @@
     <string name="title_pref_mux_concurency">TCP connections（range -1 to 1024）</string>
     <string name="title_pref_mux_xudp_concurency">XUDP connections（range -1 to 1024）</string>
     <string name="title_pref_mux_xudp_quic">Handling of QUIC in mux tunnel</string>
-    <grid-array name="mux_xudp_quic_entries" />
     <string-array name="mux_xudp_quic_entries">
         <item>reject</item>
         <item>allow</item>
