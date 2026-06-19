@@ -457,7 +457,6 @@
                     android:background="@drawable/bg_proxy_selected"
                     app:elevation="0dp"
                     app:itemIconSize="28dp"
-                    app:itemActiveIndicatorColor="@color/md_theme_primaryContainer"
                     app:itemIconTint="@null"
                     app:itemTextColor="@color/bottom_nav_text_color"
                     app:labelVisibilityMode="labeled"
