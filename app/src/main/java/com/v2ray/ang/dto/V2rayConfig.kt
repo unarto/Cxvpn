@@ -302,11 +302,21 @@ data class V2rayConfig(
                 var auth: String? = null,
                 var up: String? = null,
                 var down: String? = null,
-                var udphop: HysteriaUdpHopBean? = null
+                var udphop: HysteriaUdpHopBean? = null,
+                var quic: QuicBean? = null
             ) {
                 data class HysteriaUdpHopBean(
                     var port: String? = null,
                     var interval: Int? = null
+                )
+                data class QuicBean(
+                    var initStreamReceiveWindow: Int? = null,
+                    var maxStreamReceiveWindow: Int? = null,
+                    var initConnReceiveWindow: Int? = null,
+                    var maxConnReceiveWindow: Int? = null,
+                    var maxIdleTimeout: String? = null,
+                    var maxIncomingStreams: Int? = null,
+                    var disablePathMTUDiscovery: Boolean? = null
                 )
             }
 

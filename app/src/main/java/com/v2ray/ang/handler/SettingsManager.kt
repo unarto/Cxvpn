@@ -400,6 +400,16 @@ object SettingsManager {
      * Ensure default settings are present in MMKV.
      */
     fun ensureDefaultSettings() {
+        if (MmkvManager.decodeSettingsString(AppConfig.PREF_VPN_DNS) == "1.1.1.1") {
+            MmkvManager.encodeSettings(AppConfig.PREF_VPN_DNS, AppConfig.DNS_VPN)
+        }
+        if (MmkvManager.decodeSettingsString(AppConfig.PREF_REMOTE_DNS) == "1.1.1.1") {
+            MmkvManager.encodeSettings(AppConfig.PREF_REMOTE_DNS, AppConfig.DNS_PROXY)
+        }
+        if (MmkvManager.decodeSettingsString(AppConfig.PREF_DOMESTIC_DNS) == "223.5.5.5") {
+            MmkvManager.encodeSettings(AppConfig.PREF_DOMESTIC_DNS, AppConfig.DNS_DIRECT)
+        }
+
         // Write defaults in the exact order requested by the user
         ensureDefaultValue(AppConfig.PREF_MODE, AppConfig.VPN)
         ensureDefaultValue(AppConfig.PREF_VPN_DNS, AppConfig.DNS_VPN)
@@ -408,6 +418,7 @@ object SettingsManager {
         ensureDefaultValue(AppConfig.PREF_SOCKS_PORT, AppConfig.PORT_SOCKS)
         ensureDefaultValue(AppConfig.PREF_REMOTE_DNS, AppConfig.DNS_PROXY)
         ensureDefaultValue(AppConfig.PREF_DOMESTIC_DNS, AppConfig.DNS_DIRECT)
+        ensureDefaultValue(AppConfig.PREF_DNS_HOSTS, "dns.adguard-dns.com:94.140.14.14")
         ensureDefaultValue(AppConfig.PREF_DELAY_TEST_URL, AppConfig.DELAY_TEST_URL)
         ensureDefaultValue(AppConfig.PREF_IP_API_URL, AppConfig.IP_API_URL)
         ensureDefaultValue(AppConfig.PREF_HEV_TUNNEL_RW_TIMEOUT, AppConfig.HEVTUN_RW_TIMEOUT)

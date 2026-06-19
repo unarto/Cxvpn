@@ -1270,6 +1270,20 @@ object V2rayConfigManager {
                             ?: 30
                     )
                 }
+                if (profileItem.initStreamReceiveWindow != null || profileItem.maxStreamReceiveWindow != null ||
+                    profileItem.initConnReceiveWindow != null || profileItem.maxConnReceiveWindow != null ||
+                    profileItem.maxIdleTimeout.isNotNullEmpty() || profileItem.maxIncomingStreams != null ||
+                    profileItem.disablePathMTUDiscovery != null) {
+                    hysteriaSetting.quic = StreamSettingsBean.HysteriaSettingsBean.QuicBean(
+                        initStreamReceiveWindow = profileItem.initStreamReceiveWindow,
+                        maxStreamReceiveWindow = profileItem.maxStreamReceiveWindow,
+                        initConnReceiveWindow = profileItem.initConnReceiveWindow,
+                        maxConnReceiveWindow = profileItem.maxConnReceiveWindow,
+                        maxIdleTimeout = profileItem.maxIdleTimeout,
+                        maxIncomingStreams = profileItem.maxIncomingStreams,
+                        disablePathMTUDiscovery = profileItem.disablePathMTUDiscovery
+                    )
+                }
                 streamSettings.hysteriaSettings = hysteriaSetting
             }
         }

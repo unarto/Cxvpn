@@ -125,6 +125,15 @@ class ServerActivity : BaseActivity() {
     private val et_reserved1: EditText? by lazy { findViewById(R.id.et_reserved1) }
     private val et_local_address: EditText? by lazy { findViewById(R.id.et_local_address) }
     private val et_local_mtu: EditText? by lazy { findViewById(R.id.et_local_mtu) }
+    private val et_mtu: EditText? by lazy { findViewById(R.id.et_mtu) }
+    private val et_obfs: EditText? by lazy { findViewById(R.id.et_obfs) }
+    private val et_initStreamReceiveWindow: EditText? by lazy { findViewById(R.id.et_initStreamReceiveWindow) }
+    private val et_maxStreamReceiveWindow: EditText? by lazy { findViewById(R.id.et_maxStreamReceiveWindow) }
+    private val et_initConnReceiveWindow: EditText? by lazy { findViewById(R.id.et_initConnReceiveWindow) }
+    private val et_maxConnReceiveWindow: EditText? by lazy { findViewById(R.id.et_maxConnReceiveWindow) }
+    private val et_maxIdleTimeout: EditText? by lazy { findViewById(R.id.et_maxIdleTimeout) }
+    private val et_maxIncomingStreams: EditText? by lazy { findViewById(R.id.et_maxIncomingStreams) }
+    private val cb_disablePathMTUDiscovery: CheckBox? by lazy { findViewById(R.id.cb_disablePathMTUDiscovery) }
     private val et_obfs_password: EditText? by lazy { findViewById(R.id.et_obfs_password) }
     private val et_port_hop: EditText? by lazy { findViewById(R.id.et_port_hop) }
     private val et_port_hop_interval: EditText? by lazy { findViewById(R.id.et_port_hop_interval) }
@@ -364,6 +373,15 @@ class ServerActivity : BaseActivity() {
             et_local_mtu?.text = Utils.getEditable(config.mtu?.toString() ?: WIREGUARD_LOCAL_MTU)
         } else if (config.configType == EConfigType.HYSTERIA2) {
             et_obfs_password?.text = Utils.getEditable(config.obfsPassword)
+            et_obfs?.text = Utils.getEditable(config.obfs)
+            et_mtu?.text = Utils.getEditable(config.mtu?.toString())
+            et_initStreamReceiveWindow?.text = Utils.getEditable(config.initStreamReceiveWindow?.toString())
+            et_maxStreamReceiveWindow?.text = Utils.getEditable(config.maxStreamReceiveWindow?.toString())
+            et_initConnReceiveWindow?.text = Utils.getEditable(config.initConnReceiveWindow?.toString())
+            et_maxConnReceiveWindow?.text = Utils.getEditable(config.maxConnReceiveWindow?.toString())
+            et_maxIdleTimeout?.text = Utils.getEditable(config.maxIdleTimeout)
+            et_maxIncomingStreams?.text = Utils.getEditable(config.maxIncomingStreams?.toString())
+            cb_disablePathMTUDiscovery?.isChecked = config.disablePathMTUDiscovery ?: false
             et_port_hop?.text = Utils.getEditable(config.portHopping)
             et_port_hop_interval?.text = Utils.getEditable(config.portHoppingInterval)
             et_pinsha256?.text = Utils.getEditable(config.pinSHA256)
@@ -531,6 +549,15 @@ class ServerActivity : BaseActivity() {
             config.mtu = Utils.parseInt(et_local_mtu?.text.toString())
         } else if (config.configType == EConfigType.HYSTERIA2) {
             config.obfsPassword = et_obfs_password?.text?.toString()
+            config.obfs = et_obfs?.text?.toString()
+            config.mtu = Utils.parseInt(et_mtu?.text?.toString())
+            config.initStreamReceiveWindow = Utils.parseInt(et_initStreamReceiveWindow?.text?.toString())
+            config.maxStreamReceiveWindow = Utils.parseInt(et_maxStreamReceiveWindow?.text?.toString())
+            config.initConnReceiveWindow = Utils.parseInt(et_initConnReceiveWindow?.text?.toString())
+            config.maxConnReceiveWindow = Utils.parseInt(et_maxConnReceiveWindow?.text?.toString())
+            config.maxIdleTimeout = et_maxIdleTimeout?.text?.toString()
+            config.maxIncomingStreams = Utils.parseInt(et_maxIncomingStreams?.text?.toString())
+            config.disablePathMTUDiscovery = cb_disablePathMTUDiscovery?.isChecked
             config.portHopping = et_port_hop?.text?.toString()
             config.portHoppingInterval = et_port_hop_interval?.text?.toString()
             config.pinSHA256 = et_pinsha256?.text?.toString()

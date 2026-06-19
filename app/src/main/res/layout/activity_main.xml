@@ -180,8 +180,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
                                     app:cardCornerRadius="16dp"
-                                    app:cardBackgroundColor="@color/dashboard_card_bg"
-                                    app:cardElevation="0dp"
+                                    android:background="@drawable/bg_glass_card"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp"
                                     android:clickable="true"
@@ -343,6 +342,40 @@
                                             android:textColor="@color/dashboard_card_text"
                                             android:textSize="14sp"
                                             android:textStyle="bold" />
+                                    </LinearLayout>
+                                </androidx.cardview.widget.CardView>
+                                
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/btn_vpn_mode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="80dp"
+                                    app:cardCornerRadius="16dp"
+                                    app:cardBackgroundColor="@color/dashboard_card_bg"
+                                    app:cardElevation="0dp"
+                                    android:focusable="true"
+                                    android:clickable="true"
+                                    android:layout_marginStart="8dp"
+                                    android:layout_marginBottom="16dp">
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:gravity="center"
+                                        android:paddingHorizontal="16dp"
+                                        android:orientation="vertical">
+                                        <TextView
+                                            android:id="@+id/tv_vpn_mode"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Mode VPN"
+                                            android:textColor="@color/dashboard_card_text"
+                                            android:layout_marginBottom="4dp"
+                                            android:textStyle="bold" />
+                                        <com.google.android.material.switchmaterial.SwitchMaterial
+                                            android:id="@+id/switch_vpn_mode"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:clickable="false"
+                                            android:focusable="false" />
                                     </LinearLayout>
                                 </androidx.cardview.widget.CardView>
                             </LinearLayout>

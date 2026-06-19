@@ -118,6 +118,14 @@ class MainActivity : HelperBaseActivity() {
             startActivity(Intent(this, RoutingSettingActivity::class.java))
         }
 
+        binding.btnVpnMode.setOnClickListener {
+            val isChecked = !binding.switchVpnMode.isChecked
+            binding.switchVpnMode.isChecked = isChecked
+            val newMode = if (isChecked) com.v2ray.ang.AppConfig.VPN else "Proxy only"
+            com.v2ray.ang.handler.MmkvManager.encodeSettings(com.v2ray.ang.AppConfig.PREF_MODE, newMode)
+            binding.tvVpnMode.text = if (isChecked) "Mode VPN" else "Mode Proxy"
+        }
+
         binding.fab.setOnClickListener { handleFabAction() }
         binding.layoutTest.setOnClickListener { handleLayoutTestClick() }
 
@@ -158,13 +166,8 @@ class MainActivity : HelperBaseActivity() {
             binding.tvTrafficUsage.text = "↑ ${traffic.totalTx.toTrafficString()}\n↓ ${traffic.totalRx.toTrafficString()}"
             binding.tvMemoryInfo.text = "${traffic.appMemory} MB"
             
-            val isRunning = mainViewModel.isRunning.value == true
-            val networkIp = if (isRunning) {
-                com.v2ray.ang.handler.MmkvManager.decodeServerConfig(com.v2ray.ang.handler.MmkvManager.getSelectServer() ?: "")?.server ?: getIpAddress("net")
-            } else {
-                getIpAddress("net")
-            }
-            binding.tvNetworkIp.text = if (networkIp.isNotEmpty()) networkIp else "-"
+            val providerIp = getIpAddress("net")
+            binding.tvProviderIp.text = if (providerIp.isNotEmpty()) providerIp else "-"
             val tunIp = getIpAddress("tun")
             // Fetch public IP address
             lifecycleScope.launch(Dispatchers.IO) {
@@ -175,11 +178,11 @@ class MainActivity : HelperBaseActivity() {
                     connection.readTimeout = 5000
                     val publicIp = connection.getInputStream().bufferedReader().use { it.readText() }
                     withContext(Dispatchers.Main) {
-                        binding.tvProviderIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
+                        binding.tvNetworkIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        binding.tvProviderIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+                        binding.tvNetworkIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
                     }
                 }
             }
@@ -319,8 +322,8 @@ class MainActivity : HelperBaseActivity() {
             android.os.Debug.getMemoryInfo(memInfo)
             binding.tvMemoryInfo.text = "${memInfo.totalPss / 1024L} MB"
             
-            val networkIp = getIpAddress("net")
-            binding.tvNetworkIp.text = if (networkIp.isNotEmpty()) networkIp else "-"
+            val providerIp = getIpAddress("net")
+            binding.tvProviderIp.text = if (providerIp.isNotEmpty()) providerIp else "-"
             val tunIp = getIpAddress("tun")
             // Fetch public IP address
             lifecycleScope.launch(Dispatchers.IO) {
@@ -331,11 +334,11 @@ class MainActivity : HelperBaseActivity() {
                     connection.readTimeout = 5000
                     val publicIp = connection.getInputStream().bufferedReader().use { it.readText() }
                     withContext(Dispatchers.Main) {
-                        binding.tvProviderIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
+                        binding.tvNetworkIp.text = if (publicIp.isNotEmpty()) publicIp else tunIp
                     }
                 } catch (e: Exception) {
                     withContext(Dispatchers.Main) {
-                        binding.tvProviderIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
+                        binding.tvNetworkIp.text = if (tunIp.isNotEmpty()) tunIp else "-"
                     }
                 }
             }
@@ -343,6 +346,11 @@ class MainActivity : HelperBaseActivity() {
 
         val routingMode = com.v2ray.ang.handler.MmkvManager.decodeSettingsString(com.v2ray.ang.AppConfig.PREF_ROUTING_DOMAIN_STRATEGY) ?: "IPIfNonMatch"
         binding.tvRoutingMode.text = routingMode
+        
+        val mode = com.v2ray.ang.handler.MmkvManager.decodeSettingsString(com.v2ray.ang.AppConfig.PREF_MODE) ?: com.v2ray.ang.AppConfig.VPN
+        val isVpn = mode == com.v2ray.ang.AppConfig.VPN
+        binding.switchVpnMode.isChecked = isVpn
+        binding.tvVpnMode.text = if (isVpn) "Mode VPN" else "Mode Proxy"
         
         mainViewModel.reloadServerList()
     }
@@ -445,6 +453,11 @@ class MainActivity : HelperBaseActivity() {
 
         R.id.import_manually_hysteria2 -> {
             importManually(EConfigType.HYSTERIA2.value)
+            true
+        }
+
+        R.id.import_manually_hysteriaudp -> {
+            importManually(EConfigType.HYSTERIAUDP.value)
             true
         }
 

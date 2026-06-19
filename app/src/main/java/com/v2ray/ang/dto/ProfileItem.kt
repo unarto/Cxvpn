@@ -55,6 +55,7 @@ data class ProfileItem(
     var localAddress: String? = null,
     var reserved: String? = null,
     var mtu: Int? = null,
+    var obfs: String? = null,
 
     var obfsPassword: String? = null,
     var portHopping: String? = null,
@@ -62,6 +63,13 @@ data class ProfileItem(
     var pinSHA256: String? = null,
     var bandwidthDown: String? = null,
     var bandwidthUp: String? = null,
+    var initStreamReceiveWindow: Int? = null,
+    var maxStreamReceiveWindow: Int? = null,
+    var initConnReceiveWindow: Int? = null,
+    var maxConnReceiveWindow: Int? = null,
+    var maxIdleTimeout: String? = null,
+    var maxIncomingStreams: Int? = null,
+    var disablePathMTUDiscovery: Boolean? = null,
 
     var policyGroupType: String? = null,
     var policyGroupSubscriptionId: String? = null,

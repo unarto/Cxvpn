@@ -4,10 +4,10 @@
     <color name="colorPingRed">#FF8A80</color> 
     <color name="colorConfigType">#64B5F6</color>
     <color name="colorWhite">#FFFFFF</color>
-    <color name="color_fab_active">#1E88E5</color>
+    <color name="color_fab_active">#00FFFF</color>
     <color name="color_fab_inactive">#424242</color>
     <color name="divider_color_light">#1F2937</color>
-    <color name="colorIndicator">@color/md_theme_primary</color>
+    <color name="colorIndicator">#00FFFF</color>
 
     <color name="md_theme_primary">#64B5F6</color>
     <color name="md_theme_onPrimary">#000000</color>

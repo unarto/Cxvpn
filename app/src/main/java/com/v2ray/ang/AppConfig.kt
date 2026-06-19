@@ -123,12 +123,12 @@ object AppConfig {
 
     /** DNS server addresses. */
     const val DNS_PROXY = "https://dns.adguard-dns.com/dns-query"
-    const val DNS_DIRECT = "94.140.14.14"
+    const val DNS_DIRECT = "94.140.15.15"
     const val DNS_VPN = "94.140.14.14"
     const val GEOSITE_PRIVATE = "geosite:private"
-    const val GEOSITE_CN = "geosite:id"
+    const val GEOSITE_CN = "geosite:cn"
     const val GEOIP_PRIVATE = "geoip:private"
-    const val GEOIP_CN = "geoip:id"
+    const val GEOIP_CN = "geoip:cn"
 
     /** Ports and addresses for various services. */
     const val PORT_LOCAL_DNS = "10853"
@@ -186,14 +186,18 @@ object AppConfig {
     const val HEVTUN_RW_TIMEOUT = "300,60"
 
     // Google API rule constants
-    const val GOOGLEAPIS_CN_DOMAIN = "domain:googleapis.com"
+    const val GOOGLEAPIS_CN_DOMAIN = "domain:googleapis.cn"
     const val GOOGLEAPIS_COM_DOMAIN = "googleapis.com"
 
     // Android Private DNS constants
-    const val DNS_ALIDNS_DOMAIN = "dns.quad9.net"
-    const val DNS_CLOUDFLARE_DNS_COM_DOMAIN = "dns.quad9.net"
+    const val DNS_DNSPOD_DOMAIN = "dot.pub"
+    const val DNS_ALIDNS_DOMAIN = "dns.alidns.com"
+    const val DNS_CLOUDFLARE_ONE_DOMAIN = "one.one.one.one"
+    const val DNS_CLOUDFLARE_DNS_COM_DOMAIN = "dns.cloudflare.com"
+    const val DNS_CLOUDFLARE_DNS_DOMAIN = "cloudflare-dns.com"
     const val DNS_GOOGLE_DOMAIN = "dns.google"
     const val DNS_QUAD9_DOMAIN = "dns.quad9.net"
+    const val DNS_YANDEX_DOMAIN = "common.dot.dns.yandex.net"
 
     const val DEFAULT_PORT = 443
     const val DEFAULT_SECURITY = "auto"
@@ -203,10 +207,14 @@ object AppConfig {
     const val REALITY = "reality"
     const val HEADER_TYPE_HTTP = "http"
 
-    val DNS_ALIDNS_ADDRESSES = arrayListOf("94.140.14.14", "94.140.15.15", "2a10:50c0::ad1:ff", "2a10:50c0::ad2:ff")
-    val DNS_CLOUDFLARE_DNS_COM_ADDRESSES = arrayListOf("45.90.28.167", "45.90.30.167", "2a07:a8c0::", "2a07:a8c0::")
+    val DNS_ALIDNS_ADDRESSES = arrayListOf("223.5.5.5", "223.6.6.6", "2400:3200::1", "2400:3200:baba::1")
+    val DNS_CLOUDFLARE_ONE_ADDRESSES = arrayListOf("1.1.1.1", "1.0.0.1", "2606:4700:4700::1111", "2606:4700:4700::1001")
+    val DNS_CLOUDFLARE_DNS_COM_ADDRESSES = arrayListOf("104.16.132.229", "104.16.133.229", "2606:4700::6810:84e5", "2606:4700::6810:85e5")
+    val DNS_CLOUDFLARE_DNS_ADDRESSES = arrayListOf("104.16.248.249", "104.16.249.249", "2606:4700::6810:f8f9", "2606:4700::6810:f9f9")
+    val DNS_DNSPOD_ADDRESSES = arrayListOf("1.12.12.12", "120.53.53.53")
     val DNS_GOOGLE_ADDRESSES = arrayListOf("8.8.8.8", "8.8.4.4", "2001:4860:4860::8888", "2001:4860:4860::8844")
     val DNS_QUAD9_ADDRESSES = arrayListOf("9.9.9.9", "149.112.112.112", "2620:fe::fe", "2620:fe::9")
+    val DNS_YANDEX_ADDRESSES = arrayListOf("77.88.8.8", "77.88.8.1", "2a02:6b8::feed:0ff", "2a02:6b8:0:1::feed:0ff")
 
     //minimum list https://serverfault.com/a/304791
     val ROUTED_IP_LIST = arrayListOf(
@@ -258,20 +266,5 @@ object AppConfig {
         "runetfreedom/russia-v2ray-rules-dat",
         "Chocolate4U/Iran-v2ray-rules"
     )
-
-    // =================================================================
-    // KODE DNS YANG SUDAH MATI TOTAL (DIALIKHKAN KE DNS DIRECT)
-    // =================================================================
-    const val DNS_CLOUDFLARE_ONE_DOMAIN = "dns.adguard-dns.com"
-    const val DNS_CLOUDFLARE_ONE_ADDRESSES = "94.140.14.14"
-
-    const val DNS_CLOUDFLARE_DNS_DOMAIN = "dns.adguard-dns.com"
-    const val DNS_CLOUDFLARE_DNS_ADDRESSES = "94.140.14.14"
-
-    const val DNS_DNSPOD_DOMAIN = "dns.adguard-dns.com"
-    const val DNS_DNSPOD_ADDRESSES = "94.140.14.14"
-
-    const val DNS_YANDEX_DOMAIN = "dns.adguard-dns.com"
-    const val DNS_YANDEX_ADDRESSES = "94.140.14.14"
 
 }
