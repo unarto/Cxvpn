@@ -55,4 +55,5 @@
     <color name="md_theme_errorContainer">#F9DEDC</color>
     <color name="md_theme_onError">#FFFFFF</color>
     <color name="md_theme_onErrorContainer">#410E0B</color>
+    <color name="color_bottom_nav_bg">#0D192C</color>
 </resources>

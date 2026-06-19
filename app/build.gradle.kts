@@ -154,3 +154,34 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
+
+val downloadGeoFiles = tasks.register("downloadGeoFiles") {
+    doLast {
+        val assetsDir = file("src/main/assets")
+        if (!assetsDir.exists()) {
+            assetsDir.mkdirs()
+        }
+        
+        val geoipFile = File(assetsDir, "geoip.dat")
+        if (!geoipFile.exists() || geoipFile.length() == 0L) {
+            java.net.URL("https://github.com/malikshi/v2ray-rules-dat/releases/download/202602081243/geoip.dat").openStream().use { input ->
+                java.io.FileOutputStream(geoipFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+        
+        val geositeFile = File(assetsDir, "geosite.dat")
+        if (!geositeFile.exists() || geositeFile.length() == 0L) {
+            java.net.URL("https://github.com/malikshi/v2ray-rules-dat/releases/download/202602081243/geosite.dat").openStream().use { input ->
+                java.io.FileOutputStream(geositeFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn(downloadGeoFiles)
+}
