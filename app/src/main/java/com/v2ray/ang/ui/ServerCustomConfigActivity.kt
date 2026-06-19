@@ -79,7 +79,7 @@ class ServerCustomConfigActivity : BaseActivity() {
             CustomFmt.parse(binding.editor.text.toString())
         } catch (e: Exception) {
             Log.e(AppConfig.TAG, "Failed to parse custom configuration", e)
-            toast("${getString(R.string.toast_malformed_josn)} ${e.cause?.message}")
+            toast("${getString(R.string.toast_malformed_json)} ${e.cause?.message}")
             return false
         }
 
