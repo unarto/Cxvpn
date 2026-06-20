@@ -445,6 +445,7 @@ object AngConfigManager {
             if (count > 0) {
                 it.subscription.lastUpdated = System.currentTimeMillis()
                 MmkvManager.encodeSubscription(it.guid, it.subscription)
+                SettingsChangeManager.makeSetupGroupTab()
                 Log.i(AppConfig.TAG, "Subscription updated: ${it.subscription.remarks}, $count configs")
             }
             return count

@@ -369,6 +369,10 @@ class MainActivity : HelperBaseActivity() {
     override fun onResume() {
         super.onResume()
         
+        if (SettingsChangeManager.consumeSetupGroupTab()) {
+            setupGroupTab()
+        }
+        
         val navGoTo = intent.getStringExtra("NAV_GO_TO")
         if (navGoTo == "dashboard") {
             binding.bottomNav.selectedItemId = R.id.nav_dashboard
