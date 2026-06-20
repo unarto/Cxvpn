@@ -24,7 +24,7 @@ object SshFmt : FmtBase() {
             }
         }
         
-        val params = Utils.parseQuery(uri.query)
+        val params = getQueryParam(uri)
         config.proxyHost = params["proxyHost"]
         config.proxyPort = params["proxyPort"]?.toIntOrNull()
         config.udpgwPort = params["udpgwPort"]?.toIntOrNull()
@@ -44,33 +44,3 @@ object SshFmt : FmtBase() {
         config.proxyHost?.let { if (it.isNotEmpty()) params["proxyHost"] = it }
         config.proxyPort?.let { if (it > 0) params["proxyPort"] = it.toString() }
         config.udpgwPort?.let { if (it > 0) params["udpgwPort"] = it.toString() }
-        config.payload?.let { if (it.isNotEmpty()) params["payload"] = it }
-        
-        val query = params.map { "${it.key}=${Utils.urlEncode(it.value)}" }.joinToString("&")
-        
-        return "ssh://$userInfo@${config.server}:${config.serverPort}/?$query#${Utils.urlEncode(config.remarks)}"
-    }
-    
-    fun toOutbound(profileItem: ProfileItem): OutboundBean? {
-        val outboundBean = OutboundBean()
-        outboundBean.protocol = EConfigType.SSH.name.lowercase()
-        outboundBean.tag = EConfigType.SSH.name.lowercase()
-        
-        val serverBean = OutboundBean.OutSettingsBean.ServersBean()
-        serverBean.address = profileItem.server
-        serverBean.port = profileItem.serverPort?.toIntOrNull() ?: 22
-        serverBean.user = profileItem.username
-        serverBean.password = profileItem.password
-        
-        serverBean.proxyHost = profileItem.proxyHost
-        serverBean.proxyPort = profileItem.proxyPort
-        serverBean.payload = profileItem.payload
-        serverBean.udpgwPort = profileItem.udpgwPort
-        
-        val settingsBean = OutboundBean.OutSettingsBean()
-        settingsBean.servers = listOf(serverBean)
-        outboundBean.settings = settingsBean
-        
-        return outboundBean
-    }
-}
