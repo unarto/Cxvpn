@@ -395,7 +395,9 @@ class ServerActivity : BaseActivity() {
             et_pinsha256?.text = Utils.getEditable(config.pinSHA256)
             et_bandwidth_down?.text = Utils.getEditable(config.bandwidthDown)
             et_bandwidth_up?.text = Utils.getEditable(config.bandwidthUp)
-        } else if (config.configType == EConfigType.SSH) {
+        }
+
+        if (config.configType == EConfigType.SSH) {
             et_proxy_host?.text = Utils.getEditable(config.proxyHost)
             et_proxy_port?.text = Utils.getEditable(config.proxyPort?.toString() ?: "")
             et_payload?.text = Utils.getEditable(config.payload)
@@ -578,10 +580,17 @@ class ServerActivity : BaseActivity() {
             config.bandwidthUp = et_bandwidth_up?.text?.toString()
         } else if (config.configType == EConfigType.SSH) {
             config.username = et_security?.text.toString().trim()
-            config.proxyHost = et_proxy_host?.text?.toString()?.trim()
-            config.proxyPort = Utils.parseInt(et_proxy_port?.text?.toString())
-            config.payload = et_payload?.text?.toString()?.trim()
-            config.udpgwPort = Utils.parseInt(et_udpgw_port?.text?.toString())
+            val proxyHostStr = et_proxy_host?.text?.toString()?.trim()
+            config.proxyHost = if (proxyHostStr.isNullOrEmpty()) null else proxyHostStr
+            
+            val proxyPortStr = et_proxy_port?.text?.toString()?.trim()
+            config.proxyPort = if (proxyPortStr.isNullOrEmpty()) null else Utils.parseInt(proxyPortStr)
+            
+            val payloadStr = et_payload?.text?.toString()?.trim()
+            config.payload = if (payloadStr.isNullOrEmpty()) null else payloadStr
+            
+            val udpgwPortStr = et_udpgw_port?.text?.toString()?.trim()
+            config.udpgwPort = if (udpgwPortStr.isNullOrEmpty()) null else Utils.parseInt(udpgwPortStr)
         }
     }
 
