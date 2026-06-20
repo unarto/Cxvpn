@@ -75,6 +75,11 @@ data class ProfileItem(
     var policyGroupSubscriptionId: String? = null,
     var policyGroupFilter: String? = null,
 
+    var payload: String? = null,
+    var udpgwPort: Int? = null,
+    var proxyHost: String? = null,
+    var proxyPort: Int? = null,
+
     ) {
     companion object {
         fun create(configType: EConfigType): ProfileItem {
@@ -132,6 +137,10 @@ data class ProfileItem(
                 && this.portHopping == obj.portHopping
                 && this.portHoppingInterval == obj.portHoppingInterval
                 && this.pinSHA256 == obj.pinSHA256
+                && this.payload == obj.payload
+                && this.udpgwPort == obj.udpgwPort
+                && this.proxyHost == obj.proxyHost
+                && this.proxyPort == obj.proxyPort
                 )
     }
 }

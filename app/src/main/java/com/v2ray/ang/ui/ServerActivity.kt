@@ -149,6 +149,11 @@ class ServerActivity : BaseActivity() {
     private val container_ech_force_query: LinearLayout? by lazy { findViewById(R.id.lay_ech_force_query) }
     private val et_pinned_ca256: EditText? by lazy { findViewById(R.id.et_pinned_ca256) }
     private val container_pinned_ca256: LinearLayout? by lazy { findViewById(R.id.lay_pinned_ca256) }
+    
+    private val et_proxy_host: EditText? by lazy { findViewById(R.id.et_proxy_host) }
+    private val et_proxy_port: EditText? by lazy { findViewById(R.id.et_proxy_port) }
+    private val et_payload: EditText? by lazy { findViewById(R.id.et_payload) }
+    private val et_udpgw_port: EditText? by lazy { findViewById(R.id.et_udpgw_port) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,6 +165,7 @@ class ServerActivity : BaseActivity() {
             EConfigType.VMESS -> R.layout.activity_server_vmess
             EConfigType.CUSTOM -> null
             EConfigType.SHADOWSOCKS -> R.layout.activity_server_shadowsocks
+            EConfigType.SSH -> R.layout.activity_server_ssh
             EConfigType.SOCKS, EConfigType.HTTP -> R.layout.activity_server_socks
             EConfigType.VLESS -> R.layout.activity_server_vless
             EConfigType.TROJAN -> R.layout.activity_server_trojan
@@ -355,7 +361,7 @@ class ServerActivity : BaseActivity() {
         et_port.text = Utils.getEditable(config.serverPort ?: DEFAULT_PORT.toString())
         et_id.text = Utils.getEditable(config.password.orEmpty())
 
-        if (config.configType == EConfigType.SOCKS || config.configType == EConfigType.HTTP) {
+        if (config.configType == EConfigType.SOCKS || config.configType == EConfigType.HTTP || config.configType == EConfigType.SSH) {
             et_security?.text = Utils.getEditable(config.username.orEmpty())
         } else if (config.configType == EConfigType.VLESS) {
             et_security?.text = Utils.getEditable(config.method.orEmpty())
@@ -389,6 +395,11 @@ class ServerActivity : BaseActivity() {
             et_pinsha256?.text = Utils.getEditable(config.pinSHA256)
             et_bandwidth_down?.text = Utils.getEditable(config.bandwidthDown)
             et_bandwidth_up?.text = Utils.getEditable(config.bandwidthUp)
+        } else if (config.configType == EConfigType.SSH) {
+            et_proxy_host?.text = Utils.getEditable(config.proxyHost)
+            et_proxy_port?.text = Utils.getEditable(config.proxyPort?.toString() ?: "")
+            et_payload?.text = Utils.getEditable(config.payload)
+            et_udpgw_port?.text = Utils.getEditable(config.udpgwPort?.toString() ?: "7300")
         }
         val securityEncryptions =
             if (config.configType == EConfigType.SHADOWSOCKS) shadowsocksSecuritys else securitys
@@ -565,6 +576,12 @@ class ServerActivity : BaseActivity() {
             config.pinSHA256 = et_pinsha256?.text?.toString()
             config.bandwidthDown = et_bandwidth_down?.text?.toString()
             config.bandwidthUp = et_bandwidth_up?.text?.toString()
+        } else if (config.configType == EConfigType.SSH) {
+            config.username = et_security?.text.toString().trim()
+            config.proxyHost = et_proxy_host?.text?.toString()?.trim()
+            config.proxyPort = Utils.parseInt(et_proxy_port?.text?.toString())
+            config.payload = et_payload?.text?.toString()?.trim()
+            config.udpgwPort = Utils.parseInt(et_udpgw_port?.text?.toString())
         }
     }
 

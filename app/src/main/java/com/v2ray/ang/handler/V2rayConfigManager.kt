@@ -21,6 +21,7 @@ import com.v2ray.ang.fmt.HttpFmt
 import com.v2ray.ang.fmt.Hysteria2Fmt
 import com.v2ray.ang.fmt.ShadowsocksFmt
 import com.v2ray.ang.fmt.SocksFmt
+import com.v2ray.ang.fmt.SshFmt
 import com.v2ray.ang.fmt.TrojanFmt
 import com.v2ray.ang.fmt.VlessFmt
 import com.v2ray.ang.fmt.VmessFmt
@@ -772,6 +773,7 @@ object V2rayConfigManager {
             val protocol = outbound.protocol
             if (protocol.equals(EConfigType.SHADOWSOCKS.name, true)
                 || protocol.equals(EConfigType.SOCKS.name, true)
+                || protocol.equals(EConfigType.SSH.name, true)
                 || protocol.equals(EConfigType.HTTP.name, true)
                 || protocol.equals(EConfigType.TROJAN.name, true)
                 || protocol.equals(EConfigType.WIREGUARD.name, true)
@@ -1070,6 +1072,7 @@ object V2rayConfigManager {
             EConfigType.SOCKS -> SocksFmt.toOutbound(profileItem)
             EConfigType.VLESS -> VlessFmt.toOutbound(profileItem)
             EConfigType.TROJAN -> TrojanFmt.toOutbound(profileItem)
+            EConfigType.SSH -> SshFmt.toOutbound(profileItem)
             EConfigType.WIREGUARD -> WireguardFmt.toOutbound(profileItem)
             EConfigType.HYSTERIA2 -> Hysteria2Fmt.toOutbound(profileItem)
             EConfigType.HTTP -> HttpFmt.toOutbound(profileItem)
@@ -1105,6 +1108,7 @@ object V2rayConfigManager {
             EConfigType.SHADOWSOCKS,
             EConfigType.SOCKS,
             EConfigType.HTTP,
+            EConfigType.SSH,
             EConfigType.TROJAN ->
                 return OutboundBean(
                     protocol = configType.name.lowercase(),

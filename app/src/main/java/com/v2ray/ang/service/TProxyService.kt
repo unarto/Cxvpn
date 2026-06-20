@@ -40,12 +40,18 @@ class TProxyService(
     override fun startTun2Socks() {
 //        Log.i(AppConfig.TAG, "Starting HevSocks5Tunnel via JNI")
 
-        val configContent = buildConfig()
-        val configFile = File(context.filesDir, "hev-socks5-tunnel.yaml").apply {
-            writeText(configContent)
+        val customConfigFile = File(context.filesDir, "hev-socks5-tunnel-custom.yaml")
+        val configFile = if (customConfigFile.exists()) {
+            val configContent = customConfigFile.readText()
+            Log.d(AppConfig.TAG, "HevSocks5Tunnel Custom Config content:\n$configContent")
+            customConfigFile
+        } else {
+            val configContent = buildConfig()
+            val file = File(context.filesDir, "hev-socks5-tunnel.yaml")
+            file.writeText(configContent)
+            Log.d(AppConfig.TAG, "HevSocks5Tunnel Generated Config content:\n$configContent")
+            file
         }
-//        Log.i(AppConfig.TAG, "Config file created: ${configFile.absolutePath}")
-        Log.d(AppConfig.TAG, "HevSocks5Tunnel Config content:\n$configContent")
 
         try {
 //            Log.i(AppConfig.TAG, "TProxyStartService...")

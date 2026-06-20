@@ -155,3 +155,24 @@ dependencies {
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
+val downloadAarFile = tasks.register("downloadAarFile") {
+    doLast {
+        val libsDir = file("libs")
+        if (!libsDir.exists()) {
+            libsDir.mkdirs()
+        }
+        
+        val aarFile = File(libsDir, "libv2ray.aar")
+        if (!aarFile.exists() || aarFile.length() == 0L) {
+            java.net.URL("https://github.com/unarto/Xraycorev26.1.3/releases/download/V1.0.0/libv2ray.aar").openStream().use { input ->
+                java.io.FileOutputStream(aarFile).use { output ->
+                    input.copyTo(output)
+                }
+            }
+        }
+    }
+}
+
+tasks.named("preBuild") {
+    dependsOn(downloadAarFile)
+}

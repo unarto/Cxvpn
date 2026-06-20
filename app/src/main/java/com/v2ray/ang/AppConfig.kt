@@ -177,6 +177,7 @@ object AppConfig {
     const val HYSTERIA = "hysteria://"
     const val HYSTERIA2 = "hysteria2://"
     const val HY2 = "hy2://"
+    const val SSH = "ssh://"
 
     /** Give a good name to this, IDK*/
     const val VPN = "VPN"

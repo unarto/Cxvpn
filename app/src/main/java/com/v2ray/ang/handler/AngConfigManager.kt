@@ -15,6 +15,7 @@ import com.v2ray.ang.fmt.CustomFmt
 import com.v2ray.ang.fmt.Hysteria2Fmt
 import com.v2ray.ang.fmt.ShadowsocksFmt
 import com.v2ray.ang.fmt.SocksFmt
+import com.v2ray.ang.fmt.SshFmt
 import com.v2ray.ang.fmt.TrojanFmt
 import com.v2ray.ang.fmt.VlessFmt
 import com.v2ray.ang.fmt.VmessFmt
@@ -138,6 +139,7 @@ object AngConfigManager {
                 EConfigType.SHADOWSOCKS -> ShadowsocksFmt.toUri(config)
                 EConfigType.SOCKS -> SocksFmt.toUri(config)
                 EConfigType.HTTP -> ""
+                EConfigType.SSH -> SshFmt.toUri(config)
                 EConfigType.VLESS -> VlessFmt.toUri(config)
                 EConfigType.TROJAN -> TrojanFmt.toUri(config)
                 EConfigType.WIREGUARD -> WireguardFmt.toUri(config)
@@ -340,6 +342,8 @@ object AngConfigManager {
                 ShadowsocksFmt.parse(str)
             } else if (str.startsWith(EConfigType.SOCKS.protocolScheme)) {
                 SocksFmt.parse(str)
+            } else if (str.startsWith(EConfigType.SSH.protocolScheme)) {
+                SshFmt.parse(str)
             } else if (str.startsWith(EConfigType.TROJAN.protocolScheme)) {
                 TrojanFmt.parse(str)
             } else if (str.startsWith(EConfigType.VLESS.protocolScheme)) {

@@ -31,6 +31,10 @@
             android:key="pref_check_update"
             android:title="Check for update"
             android:summary="Check for latest version" />
+        <Preference
+            android:key="pref_hev_tunnel_config"
+            android:title="HEV Tunnel Config"
+            android:summary="Edit HEV SOCKS5 Tunnel configuration" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/title_ui_settings">

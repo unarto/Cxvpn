@@ -104,6 +104,10 @@
                 android:title="@string/menu_item_import_config_manually_wireguard"
                 app:showAsAction="never" />
             <item
+                android:id="@+id/import_manually_ssh"
+                android:title="Type SSH"
+                app:showAsAction="never" />
+            <item
                 android:id="@+id/import_manually_hysteria2"
                 android:title="@string/menu_item_import_config_manually_hysteria2"
                 app:showAsAction="never" />
@@ -111,20 +115,20 @@
                 android:id="@+id/import_manually_hysteriaudp"
                 android:title="@string/menu_item_import_config_manually_hysteriaudp"
                 app:showAsAction="never" />
-            <item
-                android:id="@+id/delete_invalid"
-                android:title="@string/menu_delete_invalid"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/delete_all"
-                android:title="@string/menu_delete_all"
-                app:showAsAction="never" />
-            <item
-                android:id="@+id/export_all"
-                android:title="@string/menu_export_all"
-                app:showAsAction="never" />
         </menu>
     </item>
+    <item
+        android:id="@+id/delete_invalid"
+        android:title="@string/menu_delete_invalid"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/delete_all"
+        android:title="@string/menu_delete_all"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/export_all"
+        android:title="@string/menu_export_all"
+        app:showAsAction="never" />
     <item
         android:id="@+id/hotspot_root"
         android:title="Hotspot Root"

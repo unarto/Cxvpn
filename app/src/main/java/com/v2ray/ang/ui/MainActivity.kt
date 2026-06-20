@@ -538,6 +538,11 @@ class MainActivity : HelperBaseActivity() {
             true
         }
 
+        R.id.import_manually_ssh -> {
+            importManually(EConfigType.SSH.value)
+            true
+        }
+
         R.id.import_manually_hysteria2 -> {
             importManually(EConfigType.HYSTERIA2.value)
             true

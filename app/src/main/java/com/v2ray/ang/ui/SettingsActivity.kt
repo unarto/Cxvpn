@@ -92,6 +92,7 @@ class SettingsActivity : BaseActivity() {
         private val autoUpdateInterval by lazy { findPreference<EditTextPreference>(AppConfig.SUBSCRIPTION_AUTO_UPDATE_INTERVAL) }
         private val mode by lazy { findPreference<ListPreference>(AppConfig.PREF_MODE) }
 
+        private val uiModeNight by lazy { findPreference<ListPreference>(AppConfig.PREF_UI_MODE_NIGHT) }
         private val hevTunLogLevel by lazy { findPreference<ListPreference>(AppConfig.PREF_HEV_TUNNEL_LOGLEVEL) }
         private val hevTunRwTimeout by lazy { findPreference<EditTextPreference>(AppConfig.PREF_HEV_TUNNEL_RW_TIMEOUT) }
         private val useHevTun by lazy { findPreference<CheckBoxPreference>(AppConfig.PREF_USE_HEV_TUNNEL) }
@@ -131,6 +132,10 @@ class SettingsActivity : BaseActivity() {
             }
             findPreference<androidx.preference.Preference>("pref_check_update")?.setOnPreferenceClickListener {
                 startActivity(android.content.Intent(requireContext(), CheckUpdateActivity::class.java))
+                true
+            }
+            findPreference<androidx.preference.Preference>("pref_hev_tunnel_config")?.setOnPreferenceClickListener {
+                startActivity(android.content.Intent(requireContext(), HevTunnelConfigActivity::class.java))
                 true
             }
 
@@ -176,6 +181,12 @@ class SettingsActivity : BaseActivity() {
                 true
             }
             mode?.dialogLayoutResource = R.layout.preference_with_help_link
+
+            uiModeNight?.setOnPreferenceChangeListener { _, newValue ->
+                MmkvManager.encodeSettings(AppConfig.PREF_UI_MODE_NIGHT, newValue.toString())
+                com.v2ray.ang.handler.SettingsManager.setNightMode()
+                true
+            }
 
             useHevTun?.setOnPreferenceChangeListener { _, newValue ->
                 updateHevTunSettings(newValue as Boolean)

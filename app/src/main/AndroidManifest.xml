@@ -95,6 +95,9 @@
             android:name=".ui.LogcatActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.HevTunnelConfigActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.RoutingSettingActivity"
             android:exported="false" />
         <activity

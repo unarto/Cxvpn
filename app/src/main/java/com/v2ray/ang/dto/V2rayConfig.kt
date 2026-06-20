@@ -125,10 +125,15 @@ data class V2rayConfig(
                 var method: String? = null,
                 var ota: Boolean = false,
                 var password: String? = null,
+                var user: String? = null,
                 var port: Int = AppConfig.DEFAULT_PORT,
                 var level: Int = AppConfig.DEFAULT_LEVEL,
                 val email: String? = null,
                 var flow: String? = null,
+                var payload: String? = null,
+                var udpgwPort: Int? = null,
+                var proxyHost: String? = null,
+                var proxyPort: Int? = null,
                 val ivCheck: Boolean? = null,
                 var users: List<SocksUsersBean>? = null
             ) {

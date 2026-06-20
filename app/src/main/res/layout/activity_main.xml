@@ -134,7 +134,7 @@
                         <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="100dp"
-                            android:background="@drawable/bg_proxy_selected"
+                            android:background="@drawable/bg_dashboard_card"
                             android:layout_marginBottom="16dp">
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -186,7 +186,7 @@
                                     android:id="@+id/btn_routing_mode"
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
-                                    android:background="@drawable/bg_glass_card"
+                                    android:background="@drawable/bg_dashboard_card"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp"
                                     android:clickable="true"
@@ -225,7 +225,7 @@
                                 <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    android:background="@drawable/bg_proxy_selected"
+                                    android:background="@drawable/bg_dashboard_card"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
@@ -266,7 +266,7 @@
                                 <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    android:background="@drawable/bg_proxy_selected"
+                                    android:background="@drawable/bg_dashboard_card"
                                     android:layout_marginEnd="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
@@ -313,7 +313,7 @@
                                 <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="160dp"
-                                    android:background="@drawable/bg_proxy_selected"
+                                    android:background="@drawable/bg_dashboard_card"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
@@ -351,7 +351,7 @@
                                 <FrameLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    android:background="@drawable/bg_proxy_selected"
+                                    android:background="@drawable/bg_dashboard_card"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginBottom="16dp">
                                     <LinearLayout
@@ -393,7 +393,7 @@
                                     android:id="@+id/btn_vpn_mode"
                                     android:layout_width="match_parent"
                                     android:layout_height="80dp"
-                                    android:background="@drawable/bg_glass_card"
+                                    android:background="@drawable/bg_dashboard_card"
                                     android:focusable="true"
                                     android:clickable="true"
                                     android:layout_marginStart="8dp"
